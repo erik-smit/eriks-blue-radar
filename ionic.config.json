@@ -1,0 +1,7 @@
+{
+  "name": "eriks-blue-radar",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}

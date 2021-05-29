@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "eriks-blue-radar",
+	"webDir": "build",
+	"bundledWebRuntime": false
+}
