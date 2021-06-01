@@ -1,5 +1,14 @@
 import { createContext, useReducer } from 'react';
 
+interface ITodo {
+  text: string;
+  isCompleted: boolean;
+}
+
+interface ITodoState {
+  todos: ITodo[],
+}
+
 const initialTodos: ITodo[] = [
   { text: "Learn about React", isCompleted: false },
   { text: "Meet friend for lunch", isCompleted: true },
@@ -28,17 +37,9 @@ const TodosContextProvider: React.FC = ({children}) => {
   )
 }
 
-interface ITodoState {
-  todos: ITodo[],
-}
-
-interface ITodo {
-  text: string;
-  isCompleted: boolean;
-}
-
 enum ActionType {
   AddTodo,
+  EditTodoText,
   ToggleTodoCompleted,
   RemoveTodo,
 }
@@ -46,6 +47,12 @@ enum ActionType {
 interface AddTodo {
   type: ActionType.AddTodo;
   payload: ITodo;
+}
+
+interface EditTodoText {
+  type: ActionType.EditTodoText;
+  text: string;
+  index: number;
 }
 
 interface ToggleTodoCompleted {
@@ -58,7 +65,7 @@ interface RemoveTodo {
   index: number;
 }
 
-type TodoActions = AddTodo | ToggleTodoCompleted | RemoveTodo;
+type TodoActions = AddTodo | EditTodoText | ToggleTodoCompleted | RemoveTodo;
 
 function todosReducer(state: ITodoState, action: TodoActions): ITodoState {
   // return [...todos];
@@ -74,6 +81,24 @@ function todosReducer(state: ITodoState, action: TodoActions): ITodoState {
       const newState = { ...state }
       newState.todos.splice(action.index, 1);
       return newState
+    }
+    case ActionType.EditTodoText: {
+      if (typeof action.index === 'undefined') {
+        // TODO: throw exception?
+        return state;
+      }
+      // console.log("befState:" + JSON.stringify(state));
+      //
+      // Jumping through hoops to ensure it doesn't modify the old as a reference
+      const newTodo = {...state.todos[action.index]}
+      newTodo.text = action.text;
+      const newTodos = [...state.todos];
+      newTodos[action.index] = newTodo;
+      const newState = { ...state }
+      newState.todos = newTodos
+      // console.log("oldState: " + JSON.stringify(state));
+      // console.log("newState: " + JSON.stringify(newState));
+      return newState;
     }
     case ActionType.ToggleTodoCompleted: {
       if (typeof action.index === 'undefined') {
@@ -103,6 +128,12 @@ const todoAdd = (todo: ITodo): AddTodo => ({
   payload: todo
 })
 
+const todoEditText = (index: number, text: string): EditTodoText => ({
+  type: ActionType.EditTodoText,
+  text: text,
+  index: index
+})
+
 const todoRemove = (index: number): RemoveTodo => ({
   type: ActionType.RemoveTodo,
   index: index
@@ -113,4 +144,4 @@ const todoToggle = (index: number): ToggleTodoCompleted => ({
   index: index
 })
 
-export { TodosContext, TodosContextProvider, todoAdd, todoToggle, todoRemove }
+export { TodosContext, TodosContextProvider, todoAdd, todoEditText, todoToggle, todoRemove }

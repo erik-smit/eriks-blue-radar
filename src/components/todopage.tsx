@@ -17,7 +17,7 @@ import {
   IonToolbar
  } from '@ionic/react';
 
- import { TodosContext, todoAdd, todoToggle, todoRemove } from '../data/todo'
+import { TodosContext, todoAdd, todoToggle, todoRemove } from '../data/todo'
 
 const TodoPage: React.FC = () => {
   const { state } = useContext(TodosContext);
@@ -34,8 +34,8 @@ const TodoPage: React.FC = () => {
           {state.todos.map((todo, index) => (
             <TodoRowEntry key={index} index={index} />
           ))}
-        <IonItemDivider />
-        <TodoAddEntry />
+          <IonItemDivider />
+          <TodoAddEntry />
         </IonList>
       </IonContent>
     </IonPage>
@@ -55,6 +55,7 @@ const TodoRowEntry: React.FC<ITodoRowContainerProps> = ({ index }) => {
         style={{ textDecoration: state.todos[index].isCompleted ? "line-through" : "" }}>
         { state.todos[index].text }
       </IonLabel>
+      <IonItem routerLink={`/todoedit/${index}`}>Edit</IonItem>
       <IonToggle
         checked={ state.todos[index].isCompleted }
         onIonChange= { () => dispatch(todoToggle(index)) } />
@@ -65,7 +66,6 @@ const TodoRowEntry: React.FC<ITodoRowContainerProps> = ({ index }) => {
     </IonItem>
   )
 }
-
 
 const TodoAddEntry: React.FC = () => {
   const { dispatch } = useContext(TodosContext);

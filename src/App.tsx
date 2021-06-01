@@ -14,6 +14,7 @@ import { IonReactRouter } from '@ionic/react-router';
 
 import { SettingsPage } from './components/settingspage';
 import { TodoPage } from './components/todopage';
+import { TodoEditPage } from './components/todoeditpage';
 import { TodosContextProvider } from './data/todo'
 
 /* Core CSS required for Ionic components to work properly */
@@ -55,6 +56,7 @@ const App: React.FC = () => {
 
           <IonRouterOutlet>
             <Route path="/todo" component={TodoPage} />
+            <Route path="/todoedit/:id" component={TodoEditPage} />
             <Route path="/settings" component={SettingsPage} />
             <Route exact path="/" render={() => <Redirect to="/todo" />} />
           </IonRouterOutlet>
