@@ -1,29 +1,20 @@
-import { ChangeEvent, FormEvent ,createContext, useContext, useReducer, useState } from 'react';
-import { InputChangeEventDetail } from "@ionic/core";
-import { closeOutline, home, settings } from "ionicons/icons"
+import { home, settings } from "ionicons/icons"
 import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import { 
   IonApp, 
-  IonButton, 
-  IonContent, 
-  IonHeader,
   IonIcon, 
-  IonInput, 
-  IonItem, 
-  IonItemDivider, 
   IonLabel, 
-  IonList, 
-  IonPage, 
   IonRouterOutlet,
   IonTabs,
   IonTabBar,
   IonTabButton,
-  IonTitle, 
-  IonToggle, IonToolbar,  } from '@ionic/react';
+} from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 
-import { TodoPage, TodosContext, TodosContextProvider } from './Todo';
+import { SettingsPage } from './components/settingspage';
+import { TodoPage } from './components/todopage';
+import { TodosContextProvider } from './data/todo'
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -73,25 +64,5 @@ const App: React.FC = () => {
   </TodosContextProvider>
   );
 }
-
-const SettingsPage: React.FC = () => {
-  const { state } = useContext(TodosContext);
-
-  const TodoList = JSON.stringify(state.todos);
-
-  return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Settings</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent>
-        <h1>Settings</h1>
-        {TodoList}
-      </IonContent>
-    </IonPage>
-  );
-};
 
 export default App;
