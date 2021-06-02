@@ -2,35 +2,41 @@ import type { ScanResult } from '@capacitor-community/bluetooth-le';
 import { BleClient } from '@capacitor-community/bluetooth-le';
 import { createContext, useEffect, useState, useReducer, useContext } from 'react';
 
-const initialScanResultState: ScanResult[] = []
+interface IMyScanResult {
+  scanresult: ScanResult;
+ }
+
+const initialScanResultState: IMyScanResult[] = []
 
 const ScanResultsContext = createContext<{
-    scanResults: ScanResult[];
-    setScanResults: React.Dispatch<React.SetStateAction<ScanResult[]>>;
+    myScanResults: IMyScanResult[];
+    setMyScanResults: React.Dispatch<React.SetStateAction<IMyScanResult[]>>;
   }>({
-    scanResults: initialScanResultState,
-    setScanResults: () => undefined,
+    myScanResults: initialScanResultState,
+    setMyScanResults: () => undefined,
   });
 
-const ScanResultScanningStart = async (setScanResults: React.Dispatch<React.SetStateAction<ScanResult[]>>) => {
-  setScanResults([]);
+const ScanResultScanningStart = async (setMyScanResults: React.Dispatch<React.SetStateAction<IMyScanResult[]>>) => {
+  setMyScanResults([]);
 
   await BleClient.initialize();
   await BleClient.requestLEScan({
     allowDuplicates: true,
   },
   async result => {
-    setScanResults((prevScanResults) => {
+    setMyScanResults((prevMyScanResults) => {
       let index = -1;
-      prevScanResults.forEach((scanresult, pos) => {
-        if (scanresult.device.deviceId === result.device.deviceId) {
-          prevScanResults[index = pos] = result
+      prevMyScanResults.forEach((myscanresult, pos) => {
+        if (myscanresult.scanresult.device.deviceId === result.device.deviceId) {
+          prevMyScanResults[index = pos].scanresult = result
         }
       });
       if (index === -1) {
-        return [...prevScanResults, result]
+        return [...prevMyScanResults, {
+          scanresult: result
+        }]
       } else {
-        return prevScanResults;
+        return prevMyScanResults;
       }
     });
   });
@@ -40,37 +46,14 @@ const ScanResultScanningStop = async () => {
   await BleClient.stopLEScan();
 }
 const ScanResultContextProvider: React.FC = ({children}) => {
-  const [ scanResults, setScanResults ] = useState(initialScanResultState)
-
-  useEffect(() => {
-    // (async () => {
-    //   await BleClient.initialize();
-    //   await BleClient.requestLEScan({
-    //     allowDuplicates: true,
-    //   },
-    //   async result => {
-    //     setScanResults((prevScanResults) => {
-    //       let index = -1;
-    //       prevScanResults.filter((scanresult, pos) => {
-    //         if (scanresult.device.deviceId === result.device.deviceId) {
-    //           prevScanResults[index = pos] = result
-    //         }
-    //       });
-    //       if (index === -1) {
-    //         return [...prevScanResults, result]
-    //       } else {
-    //         return prevScanResults;
-    //       }
-    //     });
-    //   });
-    // })();
-  }, []);
+  const [ myScanResults, setMyScanResults ] = useState(initialScanResultState)
 
   return (
-    <ScanResultsContext.Provider value={ { scanResults, setScanResults } }>
+    <ScanResultsContext.Provider value={ { myScanResults, setMyScanResults } }>
       {children}
     </ScanResultsContext.Provider>
   )
 }
 
 export { ScanResultsContext, ScanResultContextProvider, ScanResultScanningStart, ScanResultScanningStop }
+export type { IMyScanResult }

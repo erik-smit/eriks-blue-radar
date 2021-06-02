@@ -22,7 +22,7 @@ import {
 import { ScanResultsContext, ScanResultScanningStart, ScanResultScanningStop } from '../data/scanresults'
 
 const ScanResultsPage: React.FC = () => {
-  const { scanResults, setScanResults } = useContext(ScanResultsContext);
+  const { myScanResults, setMyScanResults } = useContext(ScanResultsContext);
 
   return (
     <IonPage>
@@ -31,7 +31,7 @@ const ScanResultsPage: React.FC = () => {
           <IonTitle slot="start">Devices</IonTitle>
           {/* <IonButtons slot="end"> */}
             <IonButton
-              onClick={ async () => { await ScanResultScanningStart(setScanResults) }  }
+              onClick={ async () => { await ScanResultScanningStart(setMyScanResults) }  }
             >Start</IonButton>
             <IonButton
               onClick={ async () => { await ScanResultScanningStop() }  }
@@ -41,7 +41,7 @@ const ScanResultsPage: React.FC = () => {
       </IonHeader>
       <IonContent>
         <IonList>
-          {scanResults.map((scanresult, index) => (
+          {myScanResults.map((myscanresult, index) => (
             <ScanResultRowEntry key={index} index={index} />
           ))}
           <IonItemDivider />
@@ -56,18 +56,18 @@ interface IScanResultRowContainerProps {
 }
 
 const ScanResultRowEntry: React.FC<IScanResultRowContainerProps> = ({ index }) => {
-  const { scanResults } = useContext(ScanResultsContext);
-  const scanresult = scanResults[index]
+  const { myScanResults } = useContext(ScanResultsContext);
+  const myscanresult = myScanResults[index]
 
   return (
     <IonItem routerLink={`/scanresult/${index}`} detail={false}>
       <IonLabel className="ion-text-wrap">
         <h2>
-          { scanresult.device.deviceId }
+          { myscanresult.scanresult.device.deviceId }
         </h2>
         <span className="">
           <IonNote>
-            { scanresult.rssi } dBm
+            { myscanresult.scanresult.rssi } dBm
           </IonNote>
         </span>
       </IonLabel>

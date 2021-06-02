@@ -26,8 +26,8 @@ const ScanResultDetailPage: React.FC = () => {
   const params = useParams<{ index: string }>();
   const index = parseInt(params.index, 10);
 
-  const { scanResults, setScanResults } = useContext(ScanResultsContext);
-  const scanresult = scanResults[index]
+  const { myScanResults, setMyScanResults } = useContext(ScanResultsContext);
+  const myscanresult = myScanResults[index]
 
   return (
     <IonPage>
@@ -41,19 +41,19 @@ const ScanResultDetailPage: React.FC = () => {
           <IonItem>
             <IonLabel className="ion-text-wrap">
               <h2>
-                { scanresult.device.deviceId }
+                { myscanresult.scanresult.device.deviceId }
               </h2>
             </IonLabel>
           </IonItem>
           <IonItem>
             <IonLabel>
-              Name: { scanresult.device.name! }
+              Name: { myscanresult.scanresult.device.name! }
             </IonLabel>
           </IonItem>
         </IonList>
         <IonFooter>
           <IonItem>
-            Signal Strength: { scanresult.rssi } dBm
+            Signal Strength: { myscanresult.scanresult.rssi } dBm
           </IonItem>
         </IonFooter>
       </IonContent>
@@ -66,18 +66,18 @@ interface IScanResultRowContainerProps {
 }
 
 const ScanResultRowEntry: React.FC<IScanResultRowContainerProps> = ({ index }) => {
-  const { scanResults } = useContext(ScanResultsContext);
-  const scanresult = scanResults[index]
+  const { myScanResults } = useContext(ScanResultsContext);
+  const myscanresult = myScanResults[index]
 
   return (
-    <IonItem routerLink={`/scanresult/${scanresult.device.deviceId}`} detail={false}>
+    <IonItem>
       <IonLabel className="ion-text-wrap">
         <h2>
-          { scanresult.device.deviceId }
+          { myscanresult.scanresult.device.deviceId }
         </h2>
         <span className="">
           <IonNote>
-            { scanresult.rssi } dBm
+            { myscanresult.scanresult.rssi } dBm
           </IonNote>
         </span>
       </IonLabel>
