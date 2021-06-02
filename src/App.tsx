@@ -1,4 +1,4 @@
-import { home, settings } from "ionicons/icons"
+import { home, search, settings } from "ionicons/icons"
 import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import { 
@@ -15,7 +15,10 @@ import { IonReactRouter } from '@ionic/react-router';
 import { SettingsPage } from './components/settingspage';
 import { TodoPage } from './components/todopage';
 import { TodoEditPage } from './components/todoeditpage';
-import { TodosContextProvider } from './data/todo'
+import { TodosContextProvider } from './data/todo';
+import { ScanResultContextProvider } from './data/scanresults';
+import { ScanResultsPage } from './components/scanresultspage';
+import { ScanResultDetailPage } from './components/scanresultdetailpage';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -38,32 +41,41 @@ import './theme/variables.css';
 
 const App: React.FC = () => {
   return (
-  <TodosContextProvider>
-    <IonApp>
-      <IonReactRouter>
-        <IonTabs>
-          <IonTabBar slot="bottom">
-            <IonTabButton tab="todo" href="/todo">
-              <IonIcon icon={home} />
-              <IonLabel>home</IonLabel>
-            </IonTabButton>
-      
-            <IonTabButton tab="settings" href="/settings">
-              <IonIcon icon={settings} />
-              <IonLabel>Settings</IonLabel>
-            </IonTabButton>
-          </IonTabBar>
+  <ScanResultContextProvider>
+    <TodosContextProvider>
+      <IonApp>
+        <IonReactRouter>
+          <IonTabs>
+            <IonTabBar slot="bottom">
+              <IonTabButton tab="scanresults" href="/scanresults">
+                <IonIcon icon={home} />
+                <IonLabel>scanresults</IonLabel>
+              </IonTabButton>
 
-          <IonRouterOutlet>
-            <Route path="/todo" component={TodoPage} />
-            <Route path="/todoedit/:id" component={TodoEditPage} />
-            <Route path="/settings" component={SettingsPage} />
-            <Route exact path="/" render={() => <Redirect to="/todo" />} />
-          </IonRouterOutlet>
-        </IonTabs>
-      </IonReactRouter>
-    </IonApp>
-  </TodosContextProvider>
+              <IonTabButton tab="search" href="/scanresult/">
+                <IonIcon icon={search} />
+                <IonLabel>Detail</IonLabel>
+              </IonTabButton>
+
+              <IonTabButton tab="settings" href="/settings">
+                <IonIcon icon={settings} />
+                <IonLabel>Settings</IonLabel>
+              </IonTabButton>
+            </IonTabBar>
+
+            <IonRouterOutlet>
+              <Route path="/scanresults" component={ScanResultsPage} />
+              <Route path="/scanresult/:index" component={ScanResultDetailPage} />
+              <Route path="/todo" component={TodoPage} />
+              <Route path="/todoedit/:id" component={TodoEditPage} />
+              <Route path="/settings" component={SettingsPage} />
+              <Route exact path="/" render={() => <Redirect to="/scanresults" />} />
+            </IonRouterOutlet>
+          </IonTabs>
+        </IonReactRouter>
+      </IonApp>
+    </TodosContextProvider>
+  </ScanResultContextProvider>
   );
 }
 
