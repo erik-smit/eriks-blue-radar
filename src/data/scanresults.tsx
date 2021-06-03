@@ -4,6 +4,7 @@ import { createContext, useEffect, useState, useReducer, useContext } from 'reac
 
 interface IMyScanResult {
   scanresult: ScanResult;
+  lastseen: number;
  }
 
 const initialScanResultState: IMyScanResult[] = []
@@ -26,15 +27,17 @@ const ScanResultScanningStart = async (setMyScanResults: React.Dispatch<React.Se
   async result => {
     setMyScanResults((prevMyScanResults) => {
       let index = -1;
+      const myScanResult: IMyScanResult = {
+        scanresult: result,
+        lastseen: Date.now()
+      }
       prevMyScanResults.forEach((myscanresult, pos) => {
         if (myscanresult.scanresult.device.deviceId === result.device.deviceId) {
-          prevMyScanResults[index = pos].scanresult = result
+          prevMyScanResults[index = pos] = myScanResult
         }
       });
       if (index === -1) {
-        return [...prevMyScanResults, {
-          scanresult: result
-        }]
+        return [...prevMyScanResults, myScanResult]
       } else {
         return prevMyScanResults;
       }

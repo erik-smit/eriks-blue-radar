@@ -29,14 +29,14 @@ const ScanResultsPage: React.FC = () => {
       <IonHeader>
         <IonToolbar>
           <IonTitle slot="start">Devices</IonTitle>
-          {/* <IonButtons slot="end"> */}
-            <IonButton
-              onClick={ async () => { await ScanResultScanningStart(setMyScanResults) }  }
-            >Start</IonButton>
-            <IonButton
-              onClick={ async () => { await ScanResultScanningStop() }  }
-              >Stop</IonButton>
-          {/* </IonButtons> */}
+          <IonButton
+            onClick={ async () => { await ScanResultScanningStart(setMyScanResults) }  }>
+              Start
+          </IonButton>
+          <IonButton
+            onClick={ async () => { await ScanResultScanningStop() }  }>
+              Stop
+          </IonButton>
         </IonToolbar>
       </IonHeader>
       <IonContent>
@@ -61,15 +61,16 @@ const ScanResultRowEntry: React.FC<IScanResultRowContainerProps> = ({ index }) =
 
   return (
     <IonItem routerLink={`/scanresult/${index}`} detail={false}>
-      <IonLabel className="ion-text-wrap">
+      <IonLabel className="ion-text-start">
         <h2>
           { myscanresult.scanresult.device.deviceId }
         </h2>
-        <span className="">
-          <IonNote>
-            { myscanresult.scanresult.rssi } dBm
-          </IonNote>
-        </span>
+        <IonNote>
+          Last Seen: { (Date.now()-myscanresult.lastseen) / 1000 } seconds ago
+        </IonNote>
+      </IonLabel>
+      <IonLabel className="ion-text-end">
+        { myscanresult.scanresult.rssi } dBm
       </IonLabel>
     </IonItem>
   )
