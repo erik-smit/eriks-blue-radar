@@ -63,14 +63,17 @@ const ScanResultRowEntry: React.FC<IScanResultRowContainerProps> = ({ index }) =
     <IonItem routerLink={`/scanresult/${index}`} detail={false}>
       <IonLabel className="ion-text-start">
         <h2>
+        Name: { myscanresult.scanresult.localName! }  
+        </h2>
+        <h2>
           { myscanresult.scanresult.device.deviceId }
         </h2>
         <IonNote>
-          Last Seen: { (Date.now()-myscanresult.lastseen) / 1000 } seconds ago
+          Last Seen: { (Date.now()-myscanresult.lastseen) / 1000 } secs ago
         </IonNote>
-      </IonLabel>
-      <IonLabel className="ion-text-end">
+        <IonLabel className="ion-text-end">
         { myscanresult.scanresult.rssi } dBm
+        </IonLabel>
       </IonLabel>
     </IonItem>
   )

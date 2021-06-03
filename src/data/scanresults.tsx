@@ -23,6 +23,7 @@ const ScanResultScanningStart = async (setMyScanResults: React.Dispatch<React.Se
   await BleClient.initialize();
   await BleClient.requestLEScan({
     allowDuplicates: true,
+    
   },
   async result => {
     setMyScanResults((prevMyScanResults) => {
