@@ -1,4 +1,4 @@
-import type { ScanResult } from '@capacitor-community/bluetooth-le';
+import { ScanMode, ScanResult } from '@capacitor-community/bluetooth-le';
 import { BleClient } from '@capacitor-community/bluetooth-le';
 import { createContext, useEffect, useState, useReducer, useContext } from 'react';
 
@@ -23,7 +23,7 @@ const ScanResultScanningStart = async (setMyScanResults: React.Dispatch<React.Se
   await BleClient.initialize();
   await BleClient.requestLEScan({
     allowDuplicates: true,
-    
+    scanMode: ScanMode.SCAN_MODE_LOW_LATENCY
   },
   async result => {
     setMyScanResults((prevMyScanResults) => {
