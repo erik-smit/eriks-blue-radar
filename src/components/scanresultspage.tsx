@@ -1,4 +1,5 @@
 import { FormEvent, useContext, useState } from 'react';
+import { ToggleChangeEventDetail } from '@ionic/core/components'
 import { closeOutline } from "ionicons/icons"
 import React from 'react';
 import { 
@@ -16,23 +17,23 @@ import {
   IonPage,
   IonTitle,
   IonToggle,
-  IonToolbar
+  IonToolbar,
  } from '@ionic/react';
 
+ 
+ 
 import { ScanResultsContext, ScanResultScanningStart, ScanResultScanningStop } from '../data/scanresults'
 
 const ScanResultsPage: React.FC = () => {
   const { myScanResults, setMyScanResults } = useContext(ScanResultsContext);
   const [ ScanToggle, setScanToggle ] = useState(false);
 
-  const handleScanToggleonChange = async () => {
-    const newScanToggle = !ScanToggle
-    if(newScanToggle) {
+  const handleScanToggleonChange = async (e: CustomEvent<ToggleChangeEventDetail>) => {
+    if(e.target?.value) {
       await ScanResultScanningStart(setMyScanResults)
     } else {
       await ScanResultScanningStop()
     }
-    setScanToggle(newScanToggle);
   }
 
   return (
@@ -42,7 +43,7 @@ const ScanResultsPage: React.FC = () => {
           <IonTitle slot="start">Devices</IonTitle>
           <IonToggle 
             slot="end"
-            onIonChange= { async () => { await handleScanToggleonChange()}} />
+            onIonChange= { async (e) => { await handleScanToggleonChange(e)}} />
         </IonToolbar>
       </IonHeader>
       <IonContent>
