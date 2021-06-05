@@ -74,7 +74,7 @@ const ScanResultRowEntry: React.FC<IScanResultRowContainerProps> = ({ index }) =
           { myscanresult.scanresult.device.deviceId }
         </h2>
         <IonNote>
-          Last Seen: { (Date.now()-myscanresult.lastseen) / 1000 } secs ago
+          Last Seen: { Math.round((Date.now()-myscanresult.lastseen) / 1000) } secs ago
         </IonNote>
         <IonLabel className="ion-text-end">
         { myscanresult.scanresult.rssi } dBm
