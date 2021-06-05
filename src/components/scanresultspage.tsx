@@ -23,20 +23,26 @@ import { ScanResultsContext, ScanResultScanningStart, ScanResultScanningStop } f
 
 const ScanResultsPage: React.FC = () => {
   const { myScanResults, setMyScanResults } = useContext(ScanResultsContext);
+  const [ ScanToggle, setScanToggle ] = useState(false);
+
+  const handleScanToggleonChange = async () => {
+    const newScanToggle = !ScanToggle
+    if(newScanToggle) {
+      await ScanResultScanningStart(setMyScanResults)
+    } else {
+      await ScanResultScanningStop()
+    }
+    setScanToggle(newScanToggle);
+  }
 
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
           <IonTitle slot="start">Devices</IonTitle>
-          <IonButton
-            onClick={ async () => { await ScanResultScanningStart(setMyScanResults) }  }>
-              Start
-          </IonButton>
-          <IonButton
-            onClick={ async () => { await ScanResultScanningStop() }  }>
-              Stop
-          </IonButton>
+          <IonToggle 
+            slot="end"
+            onIonChange= { async () => { await handleScanToggleonChange()}} />
         </IonToolbar>
       </IonHeader>
       <IonContent>
