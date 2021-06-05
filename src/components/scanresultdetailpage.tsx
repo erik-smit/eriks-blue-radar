@@ -83,24 +83,24 @@ const ScanResultDetailPageContainer: React.FC<IScanResultDetailPageContainerProp
         <IonItem>
           UUID: 
           <IonList>
-            { myscanresult.scanresult.uuids!.map((uuid) => (
-              <IonItem>{ uuid } </IonItem>
+            { myscanresult.scanresult.uuids!.map((uuid, index) => (
+              <IonItem key={index}>{ uuid } </IonItem>
             )) }
             </IonList>
         </IonItem>
         <IonItem>
           manufacturerData: 
           <IonList>
-            { Object.keys(myscanresult.scanresult.manufacturerData!).map((manufacturer) => (
-              <IonItem>{ manufacturer } </IonItem>
+            { Object.keys(myscanresult.scanresult.manufacturerData!).map((manufacturer, index) => (
+              <IonItem key={index}>{ manufacturer } </IonItem>
             )) }
             </IonList>
         </IonItem>
         <IonItem>
           serviceData: 
           <IonList>
-            { Object.keys(myscanresult.scanresult.serviceData!).map((service) => (
-              <IonItem>{ service } </IonItem>
+            { Object.keys(myscanresult.scanresult.serviceData!).map((service, index) => (
+              <IonItem key={index}>{ service } </IonItem>
             )) }
             </IonList>
         </IonItem>

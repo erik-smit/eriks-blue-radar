@@ -1,0 +1,13 @@
+.deviceid {
+  vertical-align: top;
+  font-style: italic
+}
+
+.localname {
+  vertical-align: top;
+  font-weight: 600
+}
+
+.scanresultrowdetail {
+  vertical-align: top
+}

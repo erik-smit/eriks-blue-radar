@@ -1,6 +1,6 @@
 import { FormEvent, useContext, useState } from 'react';
 import { ToggleChangeEventDetail } from '@ionic/core/components'
-import { closeOutline } from "ionicons/icons"
+import { wifiOutline } from "ionicons/icons"
 import React from 'react';
 import { 
   IonButton,
@@ -21,6 +21,9 @@ import {
  } from '@ionic/react';
 
 import { ScanResultsContext, ScanResultScanningStart, ScanResultScanningStop } from '../data/scanresults'
+
+import './scanresultspage.css';
+
 
 const ScanResultsPage: React.FC = () => {
   const { myScanResults, setMyScanResults } = useContext(ScanResultsContext);
@@ -66,20 +69,21 @@ const ScanResultRowEntry: React.FC<IScanResultRowContainerProps> = ({ index }) =
 
   return (
     <IonItem routerLink={`/scanresult/${index}`} detail={false}>
-      <IonLabel className="ion-text-start">
-        <h2>
-        Name: { myscanresult.scanresult.localName! }  
-        </h2>
-        <h2>
-          { myscanresult.scanresult.device.deviceId }
-        </h2>
+      <div className="ion-text-center ion-padding-end" style={{ maxWidth: "20%" }}>
+        <IonIcon icon={ wifiOutline } style={{ fontSize: 48 }} /><br/>
+        { myscanresult.scanresult.rssi }
+      </div>
+      <div className="ion-text-left ion-padding-vertical" >
+        <div>
+         Name: <span className="localname">{ myscanresult.scanresult.localName! }</span>
+        </div>
+        <div>
+          MAC: <span className="deviceid">{ myscanresult.scanresult.device.deviceId }</span>
+        </div>
         <IonNote>
           Last Seen: { Math.round((Date.now()-myscanresult.lastseen) / 1000) } secs ago
         </IonNote>
-        <IonLabel className="ion-text-end">
-        { myscanresult.scanresult.rssi } dBm
-        </IonLabel>
-      </IonLabel>
+      </div>
     </IonItem>
   )
 }
