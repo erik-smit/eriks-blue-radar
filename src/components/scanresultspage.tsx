@@ -20,16 +20,14 @@ import {
   IonToolbar,
  } from '@ionic/react';
 
- 
- 
 import { ScanResultsContext, ScanResultScanningStart, ScanResultScanningStop } from '../data/scanresults'
 
 const ScanResultsPage: React.FC = () => {
   const { myScanResults, setMyScanResults } = useContext(ScanResultsContext);
-  const [ ScanToggle, setScanToggle ] = useState(false);
 
   const handleScanToggleonChange = async (e: CustomEvent<ToggleChangeEventDetail>) => {
-    if(e.target?.value) {
+    console.log(e.detail.checked);
+    if(e.detail.checked) {
       await ScanResultScanningStart(setMyScanResults)
     } else {
       await ScanResultScanningStop()
