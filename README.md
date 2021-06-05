@@ -9,4 +9,5 @@ cd eriks-blue-radar
 npm install
 ionic build
 ionic cap sync
+ionic cap run android --livereload --external --public-host=192.168.18.237
 ```
