@@ -1,6 +1,7 @@
-import { FormEvent, useContext, useEffect, useState } from 'react';
+import { FormEvent, FocusEvent, useContext, useEffect, useState } from 'react';
+import { ToggleChangeEventDetail } from '@ionic/core/components';
 import { useParams } from 'react-router';
-import { closeOutline } from "ionicons/icons"
+import { closeOutline, toggle } from "ionicons/icons";
 import React from 'react';
 import { 
   IonButton,
@@ -21,6 +22,7 @@ import {
  } from '@ionic/react';
 
 import { ScanResultsContext, ScanResultScanningStart, ScanResultScanningStop, IMyScanResult } from '../data/scanresults'
+import { MyDeviceConfigContext, IMyDeviceConfig } from '../data/mydeviceconfig';
 import { ScanResultsPage } from './scanresultspage';
 
 const ScanResultDetailPage: React.FC = () => {
@@ -29,7 +31,7 @@ const ScanResultDetailPage: React.FC = () => {
 
   const { myScanResults } = useContext(ScanResultsContext);
   const myscanresult = myScanResults[index]
-  
+
   // TODO: device not found. return here to prevent crash. maybe route.history when clearing scanresults?
   if (typeof myscanresult === 'undefined') {
     return (
@@ -56,7 +58,10 @@ interface IScanResultDetailPageContainerProps {
 }
 
 const ScanResultDetailPageContainer: React.FC<IScanResultDetailPageContainerProps> = ({ myscanresult }) => {
-  const [lastSeenSeconds, setLastSeenSeconds] = useState(0);
+  const [ lastSeenSeconds, setLastSeenSeconds ] = useState(0);
+  const { myDeviceConfigs, setMyDeviceConfigs } = useContext(MyDeviceConfigContext);
+  const myDeviceConfig = myDeviceConfigs.find((device) => device.deviceId === myscanresult.scanresult.device.deviceId)
+  const [ myDeviceFormName, setMyDeviceFormName ] = useState<string>(myDeviceConfig?.name ? myDeviceConfig?.name : "");
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -64,6 +69,43 @@ const ScanResultDetailPageContainer: React.FC<IScanResultDetailPageContainerProp
     }, 1000);
     return () => clearInterval(interval);
   })
+
+  const myDeviceConfigAddIfNotExist = (myDeviceConfigs: IMyDeviceConfig[], deviceId: string): IMyDeviceConfig => {
+    let myDeviceConfig = myDeviceConfigs.find((device) => device.deviceId === deviceId)
+    if (typeof myDeviceConfig === "undefined") {
+      myDeviceConfig = {
+        deviceId: deviceId,
+        lowprio: true,
+        name: undefined
+      }
+      myDeviceConfigs.push(myDeviceConfig);
+    }
+    return myDeviceConfig
+  }
+
+  const toggleLowPrio = (deviceId: string) => {
+    const newMyDeviceConfigs = [...myDeviceConfigs]
+    const myDeviceConfig = myDeviceConfigAddIfNotExist(newMyDeviceConfigs, myscanresult.scanresult.device.deviceId)
+    myDeviceConfig.lowprio = !myDeviceConfig.lowprio
+    setMyDeviceConfigs(newMyDeviceConfigs)
+  }
+
+  const handleLowPrioToggleChange = async (e: CustomEvent<ToggleChangeEventDetail>) => {
+    toggleLowPrio(myscanresult.scanresult.device.deviceId)
+  }
+
+  const setMyDeviceName = (deviceId: string, name: string) => {
+    const newMyDeviceConfigs = [...myDeviceConfigs]
+    const myDeviceConfig = myDeviceConfigAddIfNotExist(newMyDeviceConfigs, myscanresult.scanresult.device.deviceId)
+    myDeviceConfig.name = myDeviceFormName;
+    console.log(newMyDeviceConfigs)
+    setMyDeviceConfigs(newMyDeviceConfigs)
+  }
+
+  const handleNameInputBlur = async () => {
+    setMyDeviceName(myscanresult.scanresult.device.deviceId, myDeviceFormName)
+  }
+
 
   return (
     <IonContent>
@@ -76,8 +118,20 @@ const ScanResultDetailPageContainer: React.FC<IScanResultDetailPageContainerProp
           </IonLabel>
         </IonItem>
         <IonItem>
+          <IonLabel> Name: </IonLabel>
+          <IonInput
+            placeholder={ myscanresult.scanresult.localName! }
+            onBlur={ async () => await handleNameInputBlur() }
+            onIonChange={ e => setMyDeviceFormName(e.detail.value!) }
+            value={myDeviceFormName}
+                    />
+        </IonItem>
+        <IonItem>
           <IonLabel>
-            Name: { myscanresult.scanresult.localName! }
+            Low prio:
+            <IonToggle
+              checked={myDeviceConfig?.lowprio}
+              onIonChange= { async (e) => { await handleLowPrioToggleChange(e)}} />
           </IonLabel>
         </IonItem>
         <IonItem>

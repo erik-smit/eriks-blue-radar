@@ -21,6 +21,8 @@ import {
  } from '@ionic/react';
 
 import { ScanResultsContext, ScanResultScanningStart, ScanResultScanningStop } from '../data/scanresults'
+import { MyDeviceConfigContext } from '../data/mydeviceconfig';
+
 import { ReactComponent as wifiIcon } from "../icons/ionic-icon-wifi-outline-eriks-blue-radar.svg"
 import './scanresultspage.css';
 
@@ -67,15 +69,20 @@ const ScanResultRowEntry: React.FC<IScanResultRowContainerProps> = ({ index }) =
   const { myScanResults } = useContext(ScanResultsContext);
   const myscanresult = myScanResults[index]
 
+  const { myDeviceConfigs } = useContext(MyDeviceConfigContext);
+  const myDeviceConfig = myDeviceConfigs.find((device) => device.deviceId === myscanresult.scanresult.device.deviceId)
+
+  const displayName = myDeviceConfig?.name ? myDeviceConfig.name : myscanresult.scanresult.localName!;
+
   return (
     <IonItem routerLink={`/scanresult/${index}`} detail={false}>
       <div className="ion-text-center ion-padding-end" style={{ maxWidth: "20%" }}>
-        <div> { wifiIcon } </div>
+        <IonIcon icon={ wifiOutline } className="signalstrength" />
         { myscanresult.scanresult.rssi }
       </div>
       <div className="ion-text-left ion-padding-vertical" >
         <div>
-         Name: <span className="localname">{ myscanresult.scanresult.localName! }</span>
+         Name: <span className="displayname">{ displayName }</span>
         </div>
         <div>
           MAC: <span className="deviceid">{ myscanresult.scanresult.device.deviceId }</span>
