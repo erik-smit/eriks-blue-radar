@@ -17,4 +17,4 @@ ionic cap run android --livereload --external --public-host=192.168.18.237
 ```
 npx @svgr/cli --icon --typescript src\icons\ionic-icon-wifi-outline-eriks-blue-radar.svg > src\icons\ionic-icon-wifi-outline-eriks-blue-radar.tsx
 ```
-manually add id="dot", id="bar-1", id="bar-2", id="bar-3" to paths after conversion
+when editing the .svg with inkscape, remove `shape-padding:0;`, `solid-color:#000000;` and `solid-opacity:1;` from the .svg to prevent TypeScript errors like `Object literal may only specify known properties, and 'solidOpacity' does not exist in type 'Properties<string | number, string & {}>'.`
