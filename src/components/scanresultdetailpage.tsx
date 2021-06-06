@@ -65,7 +65,7 @@ const ScanResultDetailPageContainer: React.FC<IScanResultDetailPageContainerProp
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setLastSeenSeconds((Date.now()-myscanresult.lastseen) / 1000)
+      setLastSeenSeconds(Math.round((Date.now()-myscanresult.lastseen) / 1000))
     }, 1000);
     return () => clearInterval(interval);
   })
@@ -98,7 +98,6 @@ const ScanResultDetailPageContainer: React.FC<IScanResultDetailPageContainerProp
     const newMyDeviceConfigs = [...myDeviceConfigs]
     const myDeviceConfig = myDeviceConfigAddIfNotExist(newMyDeviceConfigs, myscanresult.scanresult.device.deviceId)
     myDeviceConfig.name = myDeviceFormName;
-    console.log(newMyDeviceConfigs)
     setMyDeviceConfigs(newMyDeviceConfigs)
   }
 
