@@ -3,7 +3,6 @@ import { Storage } from '@capacitor/storage';
 
 interface IMyDeviceConfig {
   deviceId: string;
-  lowprio: boolean;
   name: string | undefined;
  }
 

@@ -75,23 +75,11 @@ const ScanResultDetailPageContainer: React.FC<IScanResultDetailPageContainerProp
     if (typeof myDeviceConfig === "undefined") {
       myDeviceConfig = {
         deviceId: deviceId,
-        lowprio: true,
         name: undefined
       }
       myDeviceConfigs.push(myDeviceConfig);
     }
     return myDeviceConfig
-  }
-
-  const toggleLowPrio = (deviceId: string) => {
-    const newMyDeviceConfigs = [...myDeviceConfigs]
-    const myDeviceConfig = myDeviceConfigAddIfNotExist(newMyDeviceConfigs, myscanresult.scanresult.device.deviceId)
-    myDeviceConfig.lowprio = !myDeviceConfig.lowprio
-    setMyDeviceConfigs(newMyDeviceConfigs)
-  }
-
-  const handleLowPrioToggleChange = async (e: CustomEvent<ToggleChangeEventDetail>) => {
-    toggleLowPrio(myscanresult.scanresult.device.deviceId)
   }
 
   const setMyDeviceName = (deviceId: string, name: string) => {
@@ -124,14 +112,6 @@ const ScanResultDetailPageContainer: React.FC<IScanResultDetailPageContainerProp
             onIonChange={ e => setMyDeviceFormName(e.detail.value!) }
             value={myDeviceFormName}
                     />
-        </IonItem>
-        <IonItem>
-          <IonLabel>
-            Low prio:
-            <IonToggle
-              checked={myDeviceConfig?.lowprio}
-              onIonChange= { async (e) => { await handleLowPrioToggleChange(e)}} />
-          </IonLabel>
         </IonItem>
         <IonItem>
           UUID: 
