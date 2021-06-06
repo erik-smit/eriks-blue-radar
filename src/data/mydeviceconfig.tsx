@@ -20,7 +20,12 @@ const MyDeviceConfigContext = createContext<{
 const MYDEVICECONFIG_STORAGE = "mydeviceconfig";
 
 const MyDeviceConfigContextProvider: React.FC = ({children}) => {
-  const [ myDeviceConfigs, setMyDeviceConfigs ] = useState(initialMyDeviceConfigState)
+  const [ myDeviceConfigs, realSetMyDeviceConfigs ] = useState(initialMyDeviceConfigState)
+
+  const setMyDeviceConfigs = (newMyDeviceConfigs: React.SetStateAction<IMyDeviceConfig[]>) => {
+    Storage.set({ key: MYDEVICECONFIG_STORAGE, value: JSON.stringify(newMyDeviceConfigs) });
+    return realSetMyDeviceConfigs(newMyDeviceConfigs)
+  }
 
   useEffect(() => {
     const loadSaved = async () => {
@@ -29,7 +34,7 @@ const MyDeviceConfigContextProvider: React.FC = ({children}) => {
 
       setMyDeviceConfigs(mydeviceconfigsInStorage);
     };
-    //loadSaved();
+    loadSaved();
   }, []);
 
   return (
