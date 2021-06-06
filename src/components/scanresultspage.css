@@ -15,3 +15,17 @@
 .signalstrength {
   font-size: 48px;
 }
+
+.signalstrength svg {
+  display: block;
+}
+
+.signalstrength-60 svg > #bar-1 { fill: green; }
+.signalstrength-60 svg > #bar-2 { fill: green; }
+.signalstrength-60 svg > #bar-3 { fill: green; }
+
+.signalstrength-80 svg > #bar-1 { fill: green; }
+.signalstrength-80 svg > #bar-2 { fill: green; }
+
+.signalstrength-100 svg > #bar-1 { fill: green; }
+

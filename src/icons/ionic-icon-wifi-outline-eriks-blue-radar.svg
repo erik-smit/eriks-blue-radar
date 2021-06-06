@@ -1,2 +1,82 @@
-<svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512" class="a"><style>.a{version:1;}.b{stop-color:#000;stop-opacity:1;}.c{baseline-shift:baseline;clip-rule:nonzero;color-interpolation-filters:linearRGB;color-interpolation:sRGB;color-rendering:auto;color:#000;direction:ltr;display:inline;dominant-baseline:auto;enable-background:accumulate;fill-opacity:1;fill-rule:nonzero;fill:none;font-family:sans-serif;font-feature-settings:normal;font-size:medium;font-stretch:normal;font-style:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variant:normal;font-variation-settings:normal;font-weight:normal;image-rendering:auto;inline-size:0;isolation:auto;letter-spacing:normal;line-height:normal;mix-blend-mode:normal;opacity:1;overflow:visible;shape-margin:0;shape-padding:0;shape-rendering:auto;solid-color:#000;solid-opacity:1;stop-color:#000;stop-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-width:8;stroke:#000;text-align:start;text-anchor:start;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-decoration:none;text-indent:0;text-orientation:mixed;text-rendering:auto;text-transform:none;vector-effect:none;visibility:visible;white-space:normal;word-spacing:normal;writing-mode:lr-tb;}</style><metadata class="undefined"/><defs class="undefined"><linearGradient class="undefined"><stop offset="0" class="b"/></linearGradient></defs><title class="undefined">  Wifi</title><path d="M256 416a32 32 0 1132-32 32 32 0 1-32 32z" class="undefined"/><path d="M256 265.6C224.9 265.6 193.8 276.6 169 298.6A16 16 0 0 0 167.6 321.2 16 16 0 0 0 190.2 322.5C227.8 289.1 284.2 289.1 321.8 322.5A16 16 0 0 0 344.4 321.2 16 16 0 0 0 343 298.6C318.3 276.6 287.2 265.6 256 265.6z" class="c"/><path d="M256 179.4C202.7 179.4 149.3 198.9 107.6 237.9A16 16 0 0 0 106.9 260.5 16 16 0 0 0 129.5 261.2C200.8 194.5 311.2 194.5 382.5 261.2A16 16 0 0 0 405.1 260.5 16 16 0 0 0 404.4 237.9C362.7 198.9 309.3 179.4 256 179.4z" class="c"/><path d="M256 93.1C183.6 93.1 111.2 118.8 53.6 170.2A16 16 0 0 0 52.3 192.8 16 16 0 0 0 74.9 194C178.2 101.9 333.8 101.9 437.1 194A16 16 0 0 0 459.7 192.8 16 16 0 0 0 458.4 170.2C400.8 118.8 328.4 93.1 256 93.1z" class="c"/></svg>
- 
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:osb="http://www.openswatchbook.org/uri/2009/osb"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   class="ionicon"
+   viewBox="0 0 512 512"
+   version="1.1"
+   id="svg30"
+   sodipodi:docname="ionic-icon-wifi-outline-eriks-blue-radar.svg"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+  <metadata
+     id="metadata36">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>Wifi</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs34">
+    <linearGradient
+       id="linearGradient974"
+       osb:paint="solid">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop972" />
+    </linearGradient>
+  </defs>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     id="namedview32"
+     showgrid="false"
+     inkscape:zoom="1.6601562"
+     inkscape:cx="56.319999"
+     inkscape:cy="256"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg30"
+     inkscape:document-rotation="0" />
+  <title
+     id="title24">Wifi</title>
+  <path
+     d="M256 416a32 32 0 1132-32 32 32 0 01-32 32z"
+     id="dot"
+     inkscape:label="dot" />
+  <path
+     style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-variant-east-asian:normal;font-feature-settings:normal;font-variation-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;shape-margin:0;inline-size:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:8;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000;stop-opacity:1;opacity:1"
+     d="M 256.02734 265.60742 C 224.89457 265.60723 193.7571 276.60161 168.98633 298.58594 A 15.9896 15.9896 0 0 0 167.64062 321.1582 A 15.9896 15.9896 0 0 0 190.21289 322.50391 C 227.81438 289.13217 284.24449 289.13476 321.80078 322.49805 A 15.9896 15.9896 0 0 0 344.375 321.16406 A 15.9896 15.9896 0 0 0 343.03906 298.58984 C 318.28705 276.60129 287.16012 265.60762 256.02734 265.60742 z "
+     id="bar-1"
+     inkscape:label="bar-1" />
+  <path
+     style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-variant-east-asian:normal;font-feature-settings:normal;font-variation-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;shape-margin:0;inline-size:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:8;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000;stop-opacity:1;opacity:1"
+     d="M 256 179.36328 C 202.65657 179.36328 149.31242 198.85994 107.61133 237.85352 A 16 16 0 0 0 106.85352 260.46875 A 16 16 0 0 0 129.46875 261.22656 C 200.79373 194.53248 311.20627 194.53248 382.53125 261.22656 A 16 16 0 0 0 405.14648 260.46875 A 16 16 0 0 0 404.38867 237.85352 C 362.68758 198.85994 309.34343 179.36328 256 179.36328 z "
+     id="bar-2"
+     inkscape:label="bar-2" />
+  <path
+     style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-variant-east-asian:normal;font-feature-settings:normal;font-variation-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;shape-margin:0;inline-size:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:8;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000;stop-opacity:1;opacity:1"
+     d="M 256 93.087891 C 183.61683 93.087891 111.23368 118.78166 53.628906 170.16992 A 16 16 0 0 0 52.339844 192.76172 A 16 16 0 0 0 74.931641 194.04883 C 178.199 101.92572 333.80099 101.92572 437.06836 194.04883 A 16 16 0 0 0 459.66016 192.76172 A 16 16 0 0 0 458.37109 170.16992 C 400.76632 118.78166 328.38317 93.087891 256 93.087891 z "
+     id="bar-3"
+     inkscape:label="bar-3" />
+</svg>

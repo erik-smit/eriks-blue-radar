@@ -23,7 +23,7 @@ import {
 import { ScanResultsContext, ScanResultScanningStart, ScanResultScanningStop } from '../data/scanresults'
 import { MyDeviceConfigContext } from '../data/mydeviceconfig';
 
-import { ReactComponent as wifiIcon } from "../icons/ionic-icon-wifi-outline-eriks-blue-radar.svg"
+import WifiIcon from "../icons/ionic-icon-wifi-outline-eriks-blue-radar";
 import './scanresultspage.css';
 
 
@@ -74,11 +74,16 @@ const ScanResultRowEntry: React.FC<IScanResultRowContainerProps> = ({ index }) =
 
   const displayName = myDeviceConfig?.name ? myDeviceConfig.name : myscanresult.scanresult.localName!;
 
+  const signalstrengthClass =
+    myscanresult.scanresult.rssi > -60 ? "signalstrength-60" :
+    myscanresult.scanresult.rssi > -80 ? "signalstrength-80" :
+    "signalstrength-100"
+
   return (
     <IonItem routerLink={`/scanresult/${index}`} detail={false}>
       <div className="ion-text-center ion-padding-end" style={{ maxWidth: "20%" }}>
-        <IonIcon icon={ wifiOutline } className="signalstrength" />
-        { myscanresult.scanresult.rssi }
+        <div className={ "signalstrength " + signalstrengthClass }> <WifiIcon /> </div>
+        <span> { myscanresult.scanresult.rssi } </span>
       </div>
       <div className="ion-text-left ion-padding-vertical" >
         <div>
