@@ -7,26 +7,20 @@ import {
   IonTitle, 
   IonToolbar,  } from '@ionic/react';
 
-import { TodosContext } from '../data/todo'
-
-const SettingsPage: React.FC = () => {
-  const { state } = useContext(TodosContext);
-
-  const TodoList = JSON.stringify(state.todos);
-
+const AboutPage: React.FC = () => {
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Settings</IonTitle>
+          <IonTitle>About</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <h1>Settings</h1>
-        {TodoList}
+        <h1>Put stuff here</h1>
+        https://github.com/erik-smit/eriks-blue-radar
       </IonContent>
     </IonPage>
   );
 };
 
-export { SettingsPage }
+export { AboutPage }

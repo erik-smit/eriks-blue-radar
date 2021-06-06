@@ -12,7 +12,7 @@ import {
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 
-import { SettingsPage } from './components/settingspage';
+import { AboutPage } from './components/aboutpage';
 import { TodoPage } from './components/todopage';
 import { TodoEditPage } from './components/todoeditpage';
 import { TodosContextProvider } from './data/todo';
@@ -57,9 +57,9 @@ const App: React.FC = () => {
                 <IonLabel>Detail</IonLabel>
               </IonTabButton>
 
-              <IonTabButton tab="settings" href="/settings">
+              <IonTabButton tab="about" href="/about">
                 <IonIcon icon={settings} />
-                <IonLabel>Settings</IonLabel>
+                <IonLabel>About</IonLabel>
               </IonTabButton>
             </IonTabBar>
 
@@ -68,7 +68,7 @@ const App: React.FC = () => {
               <Route path="/scanresult/:index" component={ScanResultDetailPage} />
               <Route path="/todo" component={TodoPage} />
               <Route path="/todoedit/:id" component={TodoEditPage} />
-              <Route path="/settings" component={SettingsPage} />
+              <Route path="/about" component={AboutPage} />
               <Route exact path="/" render={() => <Redirect to="/scanresults" />} />
             </IonRouterOutlet>
           </IonTabs>
