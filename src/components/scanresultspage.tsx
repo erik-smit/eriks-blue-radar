@@ -21,7 +21,7 @@ import {
  } from '@ionic/react';
 
 import { ScanResultsContext, ScanResultScanningStart, ScanResultScanningStop } from '../data/scanresults'
-
+import { ReactComponent as wifiIcon } from "../icons/ionic-icon-wifi-outline-eriks-blue-radar.svg"
 import './scanresultspage.css';
 
 
@@ -70,7 +70,7 @@ const ScanResultRowEntry: React.FC<IScanResultRowContainerProps> = ({ index }) =
   return (
     <IonItem routerLink={`/scanresult/${index}`} detail={false}>
       <div className="ion-text-center ion-padding-end" style={{ maxWidth: "20%" }}>
-        <IonIcon icon={ wifiOutline } style={{ fontSize: 48 }} /><br/>
+        <div> { wifiIcon } </div>
         { myscanresult.scanresult.rssi }
       </div>
       <div className="ion-text-left ion-padding-vertical" >

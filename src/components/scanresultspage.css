@@ -11,3 +11,7 @@
 .scanresultrowdetail {
   vertical-align: top
 }
+
+.signalstrength {
+  font-size: 48px;
+}
