@@ -72,7 +72,10 @@ const ScanResultRowEntry: React.FC<IScanResultRowContainerProps> = ({ index }) =
   const { myDeviceConfigs } = useContext(MyDeviceConfigContext);
   const myDeviceConfig = myDeviceConfigs.find((device) => device.deviceId === myscanresult.scanresult.device.deviceId)
 
-  const displayName = myDeviceConfig?.name ? myDeviceConfig.name : myscanresult.scanresult.localName!;
+  const displayName = myDeviceConfig?.name ? myDeviceConfig.name : 
+    myscanresult.scanresult.localName! ? myscanresult.scanresult.localName! : "unknown device";
+
+  const displaynameClass = myDeviceConfig?.name ? "displayname-set" : "displayname-default"
 
   const signalstrengthClass =
     myscanresult.scanresult.rssi > -60 ? "signalstrength-60" :
@@ -87,7 +90,7 @@ const ScanResultRowEntry: React.FC<IScanResultRowContainerProps> = ({ index }) =
       </div>
       <div className="ion-text-left ion-padding-vertical" >
         <div>
-         Name: <span className="displayname">{ displayName }</span>
+         Name: <span className={ displaynameClass }>{ displayName }</span>
         </div>
         <div>
           MAC: <span className="deviceid">{ myscanresult.scanresult.device.deviceId }</span>

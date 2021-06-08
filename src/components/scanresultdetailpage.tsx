@@ -25,6 +25,9 @@ import { ScanResultsContext, ScanResultScanningStart, ScanResultScanningStop, IM
 import { MyDeviceConfigContext, IMyDeviceConfig } from '../data/mydeviceconfig';
 import { ScanResultsPage } from './scanresultspage';
 
+import WifiIcon from "../icons/ionic-icon-wifi-outline-eriks-blue-radar";
+import './scanresultspage.css';
+
 const ScanResultDetailPage: React.FC = () => {
   const params = useParams<{ index: string }>();
   const index = parseInt(params.index, 10);
@@ -93,59 +96,44 @@ const ScanResultDetailPageContainer: React.FC<IScanResultDetailPageContainerProp
     setMyDeviceName(myscanresult.scanresult.device.deviceId, myDeviceFormName)
   }
 
+  const signalstrengthClass =
+    myscanresult.scanresult.rssi > -60 ? "signalstrength-60" :
+    myscanresult.scanresult.rssi > -80 ? "signalstrength-80" :
+    "signalstrength-100"
+
+  const placeholderName = myscanresult.scanresult.localName! ? myscanresult.scanresult.localName! : "unknown device";
 
   return (
     <IonContent>
-      <IonList>
-        <IonItem>
-          <IonLabel className="ion-text-wrap">
-            <h2>
-              { myscanresult.scanresult.device.deviceId }
-            </h2>
-          </IonLabel>
-        </IonItem>
-        <IonItem>
-          <IonLabel> Name: </IonLabel>
-          <IonInput
-            placeholder={ myscanresult.scanresult.localName! }
-            onBlur={ async () => await handleNameInputBlur() }
-            onIonChange={ e => setMyDeviceFormName(e.detail.value!) }
-            value={myDeviceFormName}
-                    />
-        </IonItem>
-        <IonItem>
-          UUID: 
-          <IonList>
-            { myscanresult.scanresult.uuids!.map((uuid, index) => (
-              <IonItem key={index}>{ uuid } </IonItem>
-            )) }
-            </IonList>
-        </IonItem>
-        <IonItem>
-          manufacturerData: 
-          <IonList>
-            { Object.keys(myscanresult.scanresult.manufacturerData!).map((manufacturer, index) => (
-              <IonItem key={index}>{ manufacturer } </IonItem>
-            )) }
-            </IonList>
-        </IonItem>
-        <IonItem>
-          serviceData: 
-          <IonList>
-            { Object.keys(myscanresult.scanresult.serviceData!).map((service, index) => (
-              <IonItem key={index}>{ service } </IonItem>
-            )) }
-            </IonList>
-        </IonItem>
-      </IonList>
-      <IonFooter>
+      <IonItem>
+      <div className="ion-text-left ion-padding-vertical" >
+        <div>
+         <IonLabel> Name: </IonLabel>
+         <IonInput
+    placeholder={ placeholderName }
+    onBlur={ async () => await handleNameInputBlur() }
+    onIonChange={ e => setMyDeviceFormName(e.detail.value!) }
+    value={myDeviceFormName}
+            />
+
+        </div>
+        <div>
+          MAC: <span className="deviceid">{ myscanresult.scanresult.device.deviceId }</span>
+        </div>
+        <IonNote>
+          Last Seen: { Math.round((Date.now()-myscanresult.lastseen) / 1000) } secs ago
+        </IonNote>
+      </div>
+      </IonItem>
+      <div className="ion-text-center">
         <IonItem>
           Last Seen: { lastSeenSeconds } seconds ago
         </IonItem>
-        <IonItem>
-          Signal Strength: { myscanresult.scanresult.rssi } dBm
-        </IonItem>
-      </IonFooter>
+        <div className="ion-text-center ion-padding-end" style={{ maxWidth: "20%" }}>
+        <div className={ "signalstrengthdetail " + signalstrengthClass }> <WifiIcon /> </div>
+        <span> { myscanresult.scanresult.rssi } </span>
+        </div>
+      </div>
     </IonContent>
   )
 }

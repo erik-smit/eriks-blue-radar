@@ -3,8 +3,11 @@
   font-style: italic
 }
 
-.displayname {
-  vertical-align: top;
+.displayname-default {
+  font-weight: 300
+}
+
+.displayname-set {
   font-weight: 600
 }
 
@@ -27,12 +30,12 @@
 .signalstrength-60 svg > #dot    { fill: #000000; }
 .signalstrength-60 svg > #bar-1  { fill: #9cbeff; }
 .signalstrength-60 svg > #bar-2  { fill: #9cbeff; }
-.signalstrength-60 svg > #bar-3  { fill: #3880ff; }
+.signalstrength-60 svg > #bar-3  { fill: var(--ion-color-primary); }
 
 .signalstrength-80 svg > #dot    { fill: #000000; }
 .signalstrength-80 svg > #bar-1  { fill: #9cbeff; }
-.signalstrength-80 svg > #bar-2  { fill: #3880ff; }
+.signalstrength-80 svg > #bar-2  { fill: var(--ion-color-primary); }
 
 .signalstrength-100 svg > #dot   { fill: #000000; }
-.signalstrength-100 svg > #bar-1 { fill :#3880ff; }
+.signalstrength-100 svg > #bar-1 { fill :var(--ion-color-primary); }
 
