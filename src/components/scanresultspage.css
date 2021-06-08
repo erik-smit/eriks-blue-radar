@@ -12,6 +12,10 @@
   vertical-align: top
 }
 
+.signalstrengthdetail {
+  font-size: 192px;
+}
+
 .signalstrength {
   font-size: 48px;
 }
@@ -20,12 +24,15 @@
   display: block;
 }
 
-.signalstrength-60 svg > #bar-1 { fill: green; }
-.signalstrength-60 svg > #bar-2 { fill: green; }
-.signalstrength-60 svg > #bar-3 { fill: green; }
+.signalstrength-60 svg > #dot    { fill: #000000; }
+.signalstrength-60 svg > #bar-1  { fill: #9cbeff; }
+.signalstrength-60 svg > #bar-2  { fill: #9cbeff; }
+.signalstrength-60 svg > #bar-3  { fill: #3880ff; }
 
-.signalstrength-80 svg > #bar-1 { fill: green; }
-.signalstrength-80 svg > #bar-2 { fill: green; }
+.signalstrength-80 svg > #dot    { fill: #000000; }
+.signalstrength-80 svg > #bar-1  { fill: #9cbeff; }
+.signalstrength-80 svg > #bar-2  { fill: #3880ff; }
 
-.signalstrength-100 svg > #bar-1 { fill: green; }
+.signalstrength-100 svg > #dot   { fill: #000000; }
+.signalstrength-100 svg > #bar-1 { fill :#3880ff; }
 
