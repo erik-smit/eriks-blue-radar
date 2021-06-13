@@ -105,35 +105,24 @@ const ScanResultDetailPageContainer: React.FC<IScanResultDetailPageContainerProp
 
   return (
     <IonContent>
-      <IonItem>
-      <div className="ion-text-left ion-padding-vertical" >
-        <div>
-         <IonLabel> Name: </IonLabel>
-         <IonInput
-    placeholder={ placeholderName }
-    onBlur={ async () => await handleNameInputBlur() }
-    onIonChange={ e => setMyDeviceFormName(e.detail.value!) }
-    value={myDeviceFormName}
-            />
-
-        </div>
-        <div>
-          MAC: <span className="deviceid">{ myscanresult.scanresult.device.deviceId }</span>
-        </div>
-        <IonNote>
-          Last Seen: { Math.round((Date.now()-myscanresult.lastseen) / 1000) } secs ago
-        </IonNote>
-      </div>
-      </IonItem>
-      <div className="ion-text-center">
+      <IonList>
+        <div className="rssi ion-text-center"> { myscanresult.scanresult.rssi } </div>
         <IonItem>
           Last Seen: { lastSeenSeconds } seconds ago
         </IonItem>
-        <div className="ion-text-center ion-padding-end" style={{ maxWidth: "20%" }}>
-        <div className={ "signalstrengthdetail " + signalstrengthClass }> <WifiIcon /> </div>
-        <span> { myscanresult.scanresult.rssi } </span>
-        </div>
-      </div>
+        <IonItem>
+          <IonLabel> Name: </IonLabel>
+          <IonInput
+            placeholder={ placeholderName }
+            onBlur={ async () => await handleNameInputBlur() }
+            onIonChange={ e => setMyDeviceFormName(e.detail.value!) }
+            value={myDeviceFormName}
+              />
+        </IonItem>
+        <IonItem>
+          <IonLabel> MAC: { myscanresult.scanresult.device.deviceId }</IonLabel>
+        </IonItem>
+      </IonList>
     </IonContent>
   )
 }

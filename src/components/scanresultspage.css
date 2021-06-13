@@ -11,6 +11,10 @@
   font-weight: 600
 }
 
+.rssi {
+  font-size: 196px;
+}
+
 .scanresultrowdetail {
   vertical-align: top
 }
