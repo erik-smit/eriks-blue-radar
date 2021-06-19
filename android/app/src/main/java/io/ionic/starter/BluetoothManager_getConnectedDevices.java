@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 
+import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
@@ -24,7 +25,15 @@ public class BluetoothManager_getConnectedDevices extends Plugin {
 
         JSObject ret = new JSObject();
 
-        ret.put("devices", someDevices);
+        JSArray retDevices = new JSArray();
+
+        for(BluetoothDevice bluetoothDevice: someDevices) {
+            JSObject bleDevice = new JSObject();
+            bleDevice.put("deviceId", bluetoothDevice.getAddress());
+            bleDevice.put("name", bluetoothDevice.getName());
+            retDevices.put(bleDevice);
+        }
+        ret.put("devices", retDevices);
         call.resolve(ret);
     }
 }

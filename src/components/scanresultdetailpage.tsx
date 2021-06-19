@@ -29,11 +29,11 @@ import WifiIcon from "../icons/ionic-icon-wifi-outline-eriks-blue-radar";
 import './scanresultspage.css';
 
 const ScanResultDetailPage: React.FC = () => {
-  const params = useParams<{ index: string }>();
-  const index = parseInt(params.index, 10);
+  const params = useParams<{ deviceId: string }>();
+  const deviceId = params.deviceId;
 
   const { myScanResults } = useContext(ScanResultsContext);
-  const myscanresult = myScanResults[index]
+  const myscanresult = myScanResults.find((myscanresult) => myscanresult.scanresult.device.deviceId === deviceId);
 
   // TODO: device not found. return here to prevent crash. maybe route.history when clearing scanresults?
   if (typeof myscanresult === 'undefined') {
@@ -51,7 +51,7 @@ const ScanResultDetailPage: React.FC = () => {
           <IonTitle>Search BLE Device</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <ScanResultDetailPageContainer key={index} myscanresult={myscanresult} />
+      <ScanResultDetailPageContainer key={deviceId} myscanresult={myscanresult} />
     </IonPage>
   );
 };

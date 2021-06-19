@@ -16,8 +16,9 @@ import { AboutPage } from './components/aboutpage';
 import { TodoPage } from './components/todopage';
 import { TodoEditPage } from './components/todoeditpage';
 import { TodosContextProvider } from './data/todo';
+import { ConnectedDeviceContextProvider } from './data/connecteddevices'
 import { ScanResultContextProvider } from './data/scanresults';
-import { MyDeviceConfigContext, MyDeviceConfigContextProvider } from './data/mydeviceconfig';
+import { MyDeviceConfigContextProvider } from './data/mydeviceconfig';
 import { ScanResultsPage } from './components/scanresultspage';
 import { ScanResultDetailPage } from './components/scanresultdetailpage';
 
@@ -42,43 +43,45 @@ import './theme/variables.css';
 
 const App: React.FC = () => {
   return (
-  <MyDeviceConfigContextProvider>
-    <ScanResultContextProvider>
-      <TodosContextProvider>
-        <IonApp>
-          <IonReactRouter>
-            <IonTabs>
-              <IonTabBar slot="bottom">
-                <IonTabButton tab="scanresults" href="/scanresults">
-                  <IonIcon icon={home} />
-                  <IonLabel>scanresults</IonLabel>
-                </IonTabButton>
+  <ConnectedDeviceContextProvider>
+    <MyDeviceConfigContextProvider>
+      <ScanResultContextProvider>
+        <TodosContextProvider>
+          <IonApp>
+            <IonReactRouter>
+              <IonTabs>
+                <IonTabBar slot="bottom">
+                  <IonTabButton tab="scanresults" href="/scanresults">
+                    <IonIcon icon={home} />
+                    <IonLabel>scanresults</IonLabel>
+                  </IonTabButton>
 
-                <IonTabButton tab="search" href="/scanresult/">
-                  <IonIcon icon={search} />
-                  <IonLabel>Detail</IonLabel>
-                </IonTabButton>
+                  <IonTabButton tab="search" href="/scanresult/">
+                    <IonIcon icon={search} />
+                    <IonLabel>Detail</IonLabel>
+                  </IonTabButton>
 
-                <IonTabButton tab="about" href="/about">
-                  <IonIcon icon={settings} />
-                  <IonLabel>About</IonLabel>
-                </IonTabButton>
-              </IonTabBar>
+                  <IonTabButton tab="about" href="/about">
+                    <IonIcon icon={settings} />
+                    <IonLabel>About</IonLabel>
+                  </IonTabButton>
+                </IonTabBar>
 
-              <IonRouterOutlet>
-                <Route path="/scanresults" component={ScanResultsPage} />
-                <Route path="/scanresult/:index" component={ScanResultDetailPage} />
-                <Route path="/todo" component={TodoPage} />
-                <Route path="/todoedit/:id" component={TodoEditPage} />
-                <Route path="/about" component={AboutPage} />
-                <Route exact path="/" render={() => <Redirect to="/scanresults" />} />
-              </IonRouterOutlet>
-            </IonTabs>
-          </IonReactRouter>
-        </IonApp>
-      </TodosContextProvider>
-    </ScanResultContextProvider>
-  </MyDeviceConfigContextProvider>
+                <IonRouterOutlet>
+                  <Route path="/scanresults" component={ScanResultsPage} />
+                  <Route path="/scanresult/:deviceId" component={ScanResultDetailPage} />
+                  <Route path="/todo" component={TodoPage} />
+                  <Route path="/todoedit/:id" component={TodoEditPage} />
+                  <Route path="/about" component={AboutPage} />
+                  <Route exact path="/" render={() => <Redirect to="/scanresults" />} />
+                </IonRouterOutlet>
+              </IonTabs>
+            </IonReactRouter>
+          </IonApp>
+        </TodosContextProvider>
+      </ScanResultContextProvider>
+    </MyDeviceConfigContextProvider>
+    </ConnectedDeviceContextProvider>
   );
 }
 
