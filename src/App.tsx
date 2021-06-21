@@ -19,8 +19,8 @@ import { TodosContextProvider } from './data/todo';
 import { ConnectedDeviceContextProvider } from './data/connecteddevices'
 import { ScanResultContextProvider } from './data/scanresults';
 import { MyDeviceConfigContextProvider } from './data/mydeviceconfig';
-import { ScanResultsPage } from './components/scanresultspage';
-import { ScanResultDetailPage } from './components/scanresultdetailpage';
+import { BTDevicesPage } from './components/btdevicespage';
+import { BTDeviceDetailPage } from './components/btdevicedetailpage';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -53,10 +53,10 @@ const App: React.FC = () => {
                 <IonTabBar slot="bottom">
                   <IonTabButton tab="scanresults" href="/scanresults">
                     <IonIcon icon={home} />
-                    <IonLabel>scanresults</IonLabel>
+                    <IonLabel>Devices</IonLabel>
                   </IonTabButton>
 
-                  <IonTabButton tab="search" href="/scanresult/">
+                  <IonTabButton tab="search" href="/btdevicedetail/">
                     <IonIcon icon={search} />
                     <IonLabel>Detail</IonLabel>
                   </IonTabButton>
@@ -68,8 +68,8 @@ const App: React.FC = () => {
                 </IonTabBar>
 
                 <IonRouterOutlet>
-                  <Route path="/scanresults" component={ScanResultsPage} />
-                  <Route path="/scanresult/:deviceId" component={ScanResultDetailPage} />
+                  <Route path="/scanresults" component={BTDevicesPage} />
+                  <Route path="/btdevicedetail/:deviceId" component={BTDeviceDetailPage} />
                   <Route path="/todo" component={TodoPage} />
                   <Route path="/todoedit/:id" component={TodoEditPage} />
                   <Route path="/about" component={AboutPage} />

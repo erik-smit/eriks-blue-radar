@@ -20,15 +20,15 @@ import {
   IonToolbar,
  } from '@ionic/react';
 
- import { ConnectedDevicesContext, ConnectedDeviceScanningStart, ConnectedDeviceScanningStop } from '../data/connecteddevices'
- import { ScanResultsContext, ScanResultScanningStart, ScanResultScanningStop } from '../data/scanresults'
+import { ConnectedDevicesContext, ConnectedDeviceScanningStart, ConnectedDeviceScanningStop } from '../data/connecteddevices'
+import { ScanResultsContext, ScanResultScanningStart, ScanResultScanningStop } from '../data/scanresults'
 import { MyDeviceConfigContext } from '../data/mydeviceconfig';
 
 import WifiIcon from "../icons/ionic-icon-wifi-outline-eriks-blue-radar";
-import './scanresultspage.css';
+import './btdevicespage.css';
 
 
-const ScanResultsPage: React.FC = () => {
+const BTDevicesPage: React.FC = () => {
   const { myScanResults, setMyScanResults } = useContext(ScanResultsContext);
   const { myConnectedDevices, setMyConnectedDevices } = useContext(ConnectedDevicesContext);
 
@@ -136,7 +136,7 @@ const RowEntry: React.FC<IRowContainerProps> = ({ deviceId, displayName, display
     "signalstrength-100"
 
   return (
-    <IonItem routerLink={`/scanresult/${deviceId}`} detail={false}>
+    <IonItem routerLink={`/btdevicedetail/${deviceId}`} detail={false}>
       <div className="ion-text-center ion-padding-end" style={{ maxWidth: "20%" }}>
         <div className={ "signalstrength " + signalstrengthClass }> <WifiIcon /> </div>
         <span> { signalstrength } </span>
@@ -156,4 +156,4 @@ const RowEntry: React.FC<IRowContainerProps> = ({ deviceId, displayName, display
   )
 }
 
-export { ScanResultsPage }
+export { BTDevicesPage }

@@ -1,42 +1,39 @@
-import { FormEvent, FocusEvent, useContext, useEffect, useState } from 'react';
-import { ToggleChangeEventDetail } from '@ionic/core/components';
+import { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { closeOutline, toggle } from "ionicons/icons";
 import React from 'react';
 import { 
-  IonButton,
   IonContent,
-  IonFooter,
   IonHeader,
-  IonIcon,
   IonInput,
   IonItem,
-  IonItemDivider,
   IonLabel,
   IonList,
-  IonNote,
   IonPage,
   IonTitle,
-  IonToggle,
   IonToolbar
  } from '@ionic/react';
 
-import { ScanResultsContext, ScanResultScanningStart, ScanResultScanningStop, IMyScanResult } from '../data/scanresults'
 import { MyDeviceConfigContext, IMyDeviceConfig } from '../data/mydeviceconfig';
-import { ScanResultsPage } from './scanresultspage';
+import { ScanResultsContext, IMyScanResult } from '../data/scanresults';
+import { ConnectedDevicesContext } from '../data/connecteddevices';
 
-import WifiIcon from "../icons/ionic-icon-wifi-outline-eriks-blue-radar";
-import './scanresultspage.css';
+import './btdevicespage.css';
 
-const ScanResultDetailPage: React.FC = () => {
+const BTDeviceDetailPage: React.FC = () => {
   const params = useParams<{ deviceId: string }>();
   const deviceId = params.deviceId;
 
+  const { myConnectedDevices } = useContext(ConnectedDevicesContext);
+  const myConnectedDevice = myConnectedDevices.find((myconnecteddevice) => myconnecteddevice.device.deviceId === deviceId);
+
+  const { myDeviceConfigs } = useContext(MyDeviceConfigContext);
+  const myDeviceConfig = myDeviceConfigs.find((mydevice) => mydevice.deviceId === deviceId);
+
   const { myScanResults } = useContext(ScanResultsContext);
-  const myscanresult = myScanResults.find((myscanresult) => myscanresult.scanresult.device.deviceId === deviceId);
+  const myScanResult = myScanResults.find((myscanresult) => myscanresult.scanresult.device.deviceId === deviceId);
 
   // TODO: device not found. return here to prevent crash. maybe route.history when clearing scanresults?
-  if (typeof myscanresult === 'undefined') {
+  if (typeof myScanResult === 'undefined' ) {
     return (
       <IonPage>
         Device not found
@@ -51,24 +48,33 @@ const ScanResultDetailPage: React.FC = () => {
           <IonTitle>Search BLE Device</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <ScanResultDetailPageContainer key={deviceId} myscanresult={myscanresult} />
+      <BTDeviceDetailPageContainer key={deviceId} deviceId={deviceId} />
     </IonPage>
   );
 };
 
-interface IScanResultDetailPageContainerProps {
-  myscanresult: IMyScanResult;
+interface IBTDeviceDetailPageContainerProps {
+  deviceId: string;
 }
 
-const ScanResultDetailPageContainer: React.FC<IScanResultDetailPageContainerProps> = ({ myscanresult }) => {
+const BTDeviceDetailPageContainer: React.FC<IBTDeviceDetailPageContainerProps> = ({ deviceId }) => {
+
   const [ lastSeenSeconds, setLastSeenSeconds ] = useState(0);
+
+  const { myConnectedDevices } = useContext(ConnectedDevicesContext);
+  const myConnectedDevice = myConnectedDevices.find((myconnecteddevice) => myconnecteddevice.device.deviceId === deviceId);
+  
   const { myDeviceConfigs, setMyDeviceConfigs } = useContext(MyDeviceConfigContext);
-  const myDeviceConfig = myDeviceConfigs.find((device) => device.deviceId === myscanresult.scanresult.device.deviceId)
+  const myDeviceConfig = myDeviceConfigs.find((device) => device.deviceId === deviceId)
+
+  const { myScanResults } = useContext(ScanResultsContext);
+  const myScanResult = myScanResults.find((myscanresult) => myscanresult.scanresult.device.deviceId === deviceId);
+
   const [ myDeviceFormName, setMyDeviceFormName ] = useState<string>(myDeviceConfig?.name ? myDeviceConfig?.name : "");
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setLastSeenSeconds(Math.round((Date.now()-myscanresult.lastseen) / 1000))
+      setLastSeenSeconds(Math.round((Date.now()-myScanResult!.lastseen) / 1000))
     }, 1000);
     return () => clearInterval(interval);
   })
@@ -87,26 +93,26 @@ const ScanResultDetailPageContainer: React.FC<IScanResultDetailPageContainerProp
 
   const setMyDeviceName = (deviceId: string, name: string) => {
     const newMyDeviceConfigs = [...myDeviceConfigs]
-    const myDeviceConfig = myDeviceConfigAddIfNotExist(newMyDeviceConfigs, myscanresult.scanresult.device.deviceId)
+    const myDeviceConfig = myDeviceConfigAddIfNotExist(newMyDeviceConfigs, deviceId)
     myDeviceConfig.name = myDeviceFormName;
     setMyDeviceConfigs(newMyDeviceConfigs)
   }
 
   const handleNameInputBlur = async () => {
-    setMyDeviceName(myscanresult.scanresult.device.deviceId, myDeviceFormName)
+    setMyDeviceName(deviceId, myDeviceFormName)
   }
 
   const signalstrengthClass =
-    myscanresult.scanresult.rssi > -60 ? "signalstrength-60" :
-    myscanresult.scanresult.rssi > -80 ? "signalstrength-80" :
+    myScanResult!.scanresult.rssi > -60 ? "signalstrength-60" :
+    myScanResult!.scanresult.rssi > -80 ? "signalstrength-80" :
     "signalstrength-100"
 
-  const placeholderName = myscanresult.scanresult.localName! ? myscanresult.scanresult.localName! : "unknown device";
+  const placeholderName = myScanResult!.scanresult.localName! ? myScanResult!.scanresult.localName! : "unknown device";
 
   return (
     <IonContent>
       <IonList>
-        <div className="rssi ion-text-center"> { myscanresult.scanresult.rssi } </div>
+        <div className="rssi ion-text-center"> { myScanResult!.scanresult.rssi } </div>
         <IonItem>
           Last Seen: { lastSeenSeconds } seconds ago
         </IonItem>
@@ -120,11 +126,11 @@ const ScanResultDetailPageContainer: React.FC<IScanResultDetailPageContainerProp
               />
         </IonItem>
         <IonItem>
-          <IonLabel> MAC: { myscanresult.scanresult.device.deviceId }</IonLabel>
+          <IonLabel> MAC: { myScanResult!.scanresult.device.deviceId }</IonLabel>
         </IonItem>
       </IonList>
     </IonContent>
   )
 }
 
-export { ScanResultDetailPage }
+export { BTDeviceDetailPage }
