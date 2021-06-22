@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import React from 'react';
 import { 
+  IonButton,
   IonContent,
   IonHeader,
   IonInput,
@@ -9,9 +10,12 @@ import {
   IonLabel,
   IonList,
   IonPage,
+  IonTextarea,
   IonTitle,
   IonToolbar
  } from '@ionic/react';
+
+import { BleClient, dataViewToText, numberToUUID } from '@capacitor-community/bluetooth-le';
 
 import { MyDeviceConfigContext, IMyDeviceConfig } from '../data/mydeviceconfig';
 import { ScanResultsContext, IMyScanResult } from '../data/scanresults';
@@ -92,6 +96,53 @@ const BTDeviceDetailPageContainer: React.FC<IBTDeviceDetailPageContainerProps> =
     myConnectedDevice ? myConnectedDevice.device.name :
     myScanResult ? myScanResult.scanresult.localName : "unknown device";
 
+
+  const GENERIC_ACCESS_SERVICE = numberToUUID(0x1800);
+  const GENERIC_ACCESS_SERVICE_DEVICE_NAME = numberToUUID(0x2A00);
+
+  const DEVICE_INFORMATION_SERVICE = numberToUUID(0x180a)
+  const DEVICE_INFORMATION_SERVICE_MANUFACTURER_NAME_STRING = numberToUUID(0x2a29)
+  const DEVICE_INFORMATION_SERVICE_MODEL_NUMBER_STRING = numberToUUID(0x2a24)
+  const DEVICE_INFORMATION_SERVICE_HARDWARE_REVISION_STRING = numberToUUID(0x2a27)
+  const DEVICE_INFORMATION_SERVICE_FIRMWARE_REVISION_STRING = numberToUUID(0x2a26)
+
+  const GATT_TO_GET = [
+    { name: "Device Name: ", service: GENERIC_ACCESS_SERVICE, characteristic: GENERIC_ACCESS_SERVICE_DEVICE_NAME },
+    { name: "Manufacturer: ", service: DEVICE_INFORMATION_SERVICE, characteristic: DEVICE_INFORMATION_SERVICE_MANUFACTURER_NAME_STRING },
+    { name: "Model Number: ", service: DEVICE_INFORMATION_SERVICE, characteristic: DEVICE_INFORMATION_SERVICE_MODEL_NUMBER_STRING },
+    { name: "Hardware Revision: ", service: DEVICE_INFORMATION_SERVICE, characteristic: DEVICE_INFORMATION_SERVICE_HARDWARE_REVISION_STRING },
+    { name: "Firmware Revision: ", service: DEVICE_INFORMATION_SERVICE, characteristic: DEVICE_INFORMATION_SERVICE_FIRMWARE_REVISION_STRING }
+  ]
+
+  const [ gattStatus, setGattStatus ] = useState("");
+  const handleGattClick = async () => {
+    setGattStatus((old) => old + "connecting to: " + deviceId + "\n")
+    await BleClient.connect(deviceId, (deviceId) => {
+      setGattStatus((old) => old + "disconnected from: " + deviceId + "\n")
+    })
+    setGattStatus((old) => old + "connected to: " + deviceId + "\n")
+
+    GATT_TO_GET.forEach((GattToGet) => {
+      setTimeout(async () => {
+        const result = await BleClient.read(
+          deviceId,
+          GattToGet.service,
+          GattToGet.characteristic
+        );
+
+        const dataResult = dataViewToText(result)
+        setGattStatus((old) => old + GattToGet.name + ": " + dataResult + "\n")
+      }, 1000);
+    });
+
+    // const services = await BleClient.getServices(deviceId);
+    // services.services!.forEach((service) => {
+    //   const output = service.UUID + ": " + service.characteristics.join(", ");
+    //   setGattStatus((old) => old + output + "\n");
+    //   console.log(output);
+    // })
+  }
+
   return (
     <IonContent>
       <IonList>
@@ -110,6 +161,15 @@ const BTDeviceDetailPageContainer: React.FC<IBTDeviceDetailPageContainerProps> =
         </IonItem>
         <IonItem>
           <IonLabel> MAC: { deviceId }</IonLabel>
+        </IonItem>
+        <IonButton
+          onClick={ async () => await handleGattClick() }>
+          COME GATT SOME!
+        </IonButton>
+        <IonItem>
+          <IonTextarea>
+          { gattStatus }
+          </IonTextarea>
         </IonItem>
       </IonList>
     </IonContent>
