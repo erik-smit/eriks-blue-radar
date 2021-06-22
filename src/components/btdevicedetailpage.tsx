@@ -23,24 +23,6 @@ const BTDeviceDetailPage: React.FC = () => {
   const params = useParams<{ deviceId: string }>();
   const deviceId = params.deviceId;
 
-  const { myConnectedDevices } = useContext(ConnectedDevicesContext);
-  const myConnectedDevice = myConnectedDevices.find((myconnecteddevice) => myconnecteddevice.device.deviceId === deviceId);
-
-  const { myDeviceConfigs } = useContext(MyDeviceConfigContext);
-  const myDeviceConfig = myDeviceConfigs.find((mydevice) => mydevice.deviceId === deviceId);
-
-  const { myScanResults } = useContext(ScanResultsContext);
-  const myScanResult = myScanResults.find((myscanresult) => myscanresult.scanresult.device.deviceId === deviceId);
-
-  // TODO: device not found. return here to prevent crash. maybe route.history when clearing scanresults?
-  if (typeof myScanResult === 'undefined' ) {
-    return (
-      <IonPage>
-        Device not found
-      </IonPage>
-    )
-  }
-
   return (
     <IonPage>
       <IonHeader>
@@ -58,9 +40,6 @@ interface IBTDeviceDetailPageContainerProps {
 }
 
 const BTDeviceDetailPageContainer: React.FC<IBTDeviceDetailPageContainerProps> = ({ deviceId }) => {
-
-  const [ lastSeenSeconds, setLastSeenSeconds ] = useState(0);
-
   const { myConnectedDevices } = useContext(ConnectedDevicesContext);
   const myConnectedDevice = myConnectedDevices.find((myconnecteddevice) => myconnecteddevice.device.deviceId === deviceId);
   
@@ -70,11 +49,16 @@ const BTDeviceDetailPageContainer: React.FC<IBTDeviceDetailPageContainerProps> =
   const { myScanResults } = useContext(ScanResultsContext);
   const myScanResult = myScanResults.find((myscanresult) => myscanresult.scanresult.device.deviceId === deviceId);
 
+  const [ lastSeenSeconds, setLastSeenSeconds ] = useState(0);
   const [ myDeviceFormName, setMyDeviceFormName ] = useState<string>(myDeviceConfig?.name ? myDeviceConfig?.name : "");
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setLastSeenSeconds(Math.round((Date.now()-myScanResult!.lastseen) / 1000))
+      const lastseen =
+        myConnectedDevice ? myConnectedDevice.lastseen :
+        myScanResult ? myScanResult.lastseen :
+        0
+      setLastSeenSeconds(Math.round((Date.now()-lastseen) / 1000))
     }, 1000);
     return () => clearInterval(interval);
   })
@@ -102,17 +86,16 @@ const BTDeviceDetailPageContainer: React.FC<IBTDeviceDetailPageContainerProps> =
     setMyDeviceName(deviceId, myDeviceFormName)
   }
 
-  const signalstrengthClass =
-    myScanResult!.scanresult.rssi > -60 ? "signalstrength-60" :
-    myScanResult!.scanresult.rssi > -80 ? "signalstrength-80" :
-    "signalstrength-100"
+  const rssi = myScanResult ? myScanResult.scanresult.rssi : 0;
 
-  const placeholderName = myScanResult!.scanresult.localName! ? myScanResult!.scanresult.localName! : "unknown device";
+  const placeholderName =
+    myConnectedDevice ? myConnectedDevice.device.name :
+    myScanResult ? myScanResult.scanresult.localName : "unknown device";
 
   return (
     <IonContent>
       <IonList>
-        <div className="rssi ion-text-center"> { myScanResult!.scanresult.rssi } </div>
+        <div className="rssi ion-text-center"> { rssi } </div>
         <IonItem>
           Last Seen: { lastSeenSeconds } seconds ago
         </IonItem>
@@ -126,7 +109,7 @@ const BTDeviceDetailPageContainer: React.FC<IBTDeviceDetailPageContainerProps> =
               />
         </IonItem>
         <IonItem>
-          <IonLabel> MAC: { myScanResult!.scanresult.device.deviceId }</IonLabel>
+          <IonLabel> MAC: { deviceId }</IonLabel>
         </IonItem>
       </IonList>
     </IonContent>

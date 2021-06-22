@@ -19,7 +19,6 @@ const ConnectedDevicesContext = createContext<{
   });
 
 const ConnectedDeviceScanningStart = async (setMyConnectedDevices: React.Dispatch<React.SetStateAction<IMyConnectedDevice[]>>) => {
-  setMyConnectedDevices([]);
   let ret = await BluetoothManager_getConnectedDevices.getConnectedDevices();
   let newMyConnectedDevices = initialConnectedDeviceState;
   ret.devices.forEach((device) => {
@@ -31,8 +30,8 @@ const ConnectedDeviceScanningStart = async (setMyConnectedDevices: React.Dispatc
   setMyConnectedDevices(newMyConnectedDevices)
 }
 
-const ConnectedDeviceScanningStop = async () => {
-  
+const ConnectedDeviceScanningStop = async (setMyConnectedDevices: React.Dispatch<React.SetStateAction<IMyConnectedDevice[]>>) => {
+  setMyConnectedDevices([]);  
 }
 
 const ConnectedDeviceContextProvider: React.FC = ({children}) => {

@@ -51,7 +51,7 @@ const App: React.FC = () => {
             <IonReactRouter>
               <IonTabs>
                 <IonTabBar slot="bottom">
-                  <IonTabButton tab="scanresults" href="/scanresults">
+                  <IonTabButton tab="btdevices" href="/btdevices">
                     <IonIcon icon={home} />
                     <IonLabel>Devices</IonLabel>
                   </IonTabButton>
@@ -68,12 +68,12 @@ const App: React.FC = () => {
                 </IonTabBar>
 
                 <IonRouterOutlet>
-                  <Route path="/scanresults" component={BTDevicesPage} />
+                  <Route path="/btdevices" component={BTDevicesPage} />
                   <Route path="/btdevicedetail/:deviceId" component={BTDeviceDetailPage} />
                   <Route path="/todo" component={TodoPage} />
                   <Route path="/todoedit/:id" component={TodoEditPage} />
                   <Route path="/about" component={AboutPage} />
-                  <Route exact path="/" render={() => <Redirect to="/scanresults" />} />
+                  <Route exact path="/" render={() => <Redirect to="/btdevices" />} />
                 </IonRouterOutlet>
               </IonTabs>
             </IonReactRouter>

@@ -1,17 +1,11 @@
-import { FormEvent, useContext, useState } from 'react';
+import { useContext } from 'react';
 import { ToggleChangeEventDetail } from '@ionic/core/components'
-import { wifiOutline } from "ionicons/icons"
 import React from 'react';
 import { 
-  IonButton,
-  IonButtons,
   IonContent,
   IonHeader,
-  IonIcon,
-  IonInput,
   IonItem,
   IonItemDivider,
-  IonLabel,
   IonList,
   IonNote,
   IonPage,
@@ -38,6 +32,7 @@ const BTDevicesPage: React.FC = () => {
       await ConnectedDeviceScanningStart(setMyConnectedDevices)
       await ScanResultScanningStart(setMyScanResults)
     } else {
+      await ConnectedDeviceScanningStop(setMyConnectedDevices)
       await ScanResultScanningStop()
     }
   }
