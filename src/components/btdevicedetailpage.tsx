@@ -15,7 +15,7 @@ import {
   IonToolbar
  } from '@ionic/react';
 
-import { BleClient, dataViewToText, numberToUUID } from '@capacitor-community/bluetooth-le';
+import { BleClient, dataViewToNumbers, dataViewToText, dataViewToHexString, numberToUUID } from '@capacitor-community/bluetooth-le';
 
 import { MyDeviceConfigContext, IMyDeviceConfig } from '../data/mydeviceconfig';
 import { ScanResultsContext, IMyScanResult } from '../data/scanresults';
@@ -53,9 +53,8 @@ const BTDeviceDetailPageContainer: React.FC<IBTDeviceDetailPageContainerProps> =
   const { myScanResults } = useContext(ScanResultsContext);
   const myScanResult = myScanResults.find((myscanresult) => myscanresult.scanresult.device.deviceId === deviceId);
 
+  // last seen updater
   const [ lastSeenSeconds, setLastSeenSeconds ] = useState(0);
-  const [ myDeviceFormName, setMyDeviceFormName ] = useState<string>(myDeviceConfig?.name ? myDeviceConfig?.name : "");
-
   useEffect(() => {
     const interval = setInterval(() => {
       const lastseen =
@@ -67,6 +66,7 @@ const BTDeviceDetailPageContainer: React.FC<IBTDeviceDetailPageContainerProps> =
     return () => clearInterval(interval);
   })
 
+  // maybe should be refactored into myDeviceConfig?
   const myDeviceConfigAddIfNotExist = (myDeviceConfigs: IMyDeviceConfig[], deviceId: string): IMyDeviceConfig => {
     let myDeviceConfig = myDeviceConfigs.find((device) => device.deviceId === deviceId)
     if (typeof myDeviceConfig === "undefined") {
@@ -79,6 +79,8 @@ const BTDeviceDetailPageContainer: React.FC<IBTDeviceDetailPageContainerProps> =
     return myDeviceConfig
   }
 
+  // name update functionality
+  const [ myDeviceFormName, setMyDeviceFormName ] = useState<string>(myDeviceConfig?.name ? myDeviceConfig?.name : "");
   const setMyDeviceName = (deviceId: string, name: string) => {
     const newMyDeviceConfigs = [...myDeviceConfigs]
     const myDeviceConfig = myDeviceConfigAddIfNotExist(newMyDeviceConfigs, deviceId)
@@ -90,7 +92,25 @@ const BTDeviceDetailPageContainer: React.FC<IBTDeviceDetailPageContainerProps> =
     setMyDeviceName(deviceId, myDeviceFormName)
   }
 
-  const rssi = myScanResult ? myScanResult.scanresult.rssi : 0;
+  // rssi functionality
+  const [ rssi, setRssi ] = useState(0);
+  useEffect(() => {
+    if (myScanResult) {
+      setRssi(myScanResult.scanresult.rssi)
+    } else {
+      const interval = setInterval(async () => {
+        const result = await BleClient.readRemoteRssi(
+          deviceId,
+        );
+        const rssiResult = result.getInt8(0);
+        setRssi(rssiResult);
+        myConnectedDevice!.lastseen = Date.now();
+      }, 1000);
+      ;
+      return () => clearInterval(interval)
+    }
+  })
+
 
   const placeholderName =
     myConnectedDevice ? myConnectedDevice.device.name :
@@ -115,12 +135,26 @@ const BTDeviceDetailPageContainer: React.FC<IBTDeviceDetailPageContainerProps> =
   ]
 
   const [ gattStatus, setGattStatus ] = useState("");
+  const addGattStatus = (line: String) => {
+    setGattStatus((old) => line + "\n" + old)
+  }
+
   const handleGattClick = async () => {
-    setGattStatus((old) => old + "connecting to: " + deviceId + "\n")
+    addGattStatus("connecting to: " + deviceId)
     await BleClient.connect(deviceId, (deviceId) => {
-      setGattStatus((old) => old + "disconnected from: " + deviceId + "\n")
+      addGattStatus("disconnected from: " + deviceId)
     })
-    setGattStatus((old) => old + "connected to: " + deviceId + "\n")
+    addGattStatus("connected to: " + deviceId)
+
+    setTimeout(async () => {
+      const result = await BleClient.readRemoteRssi(
+        deviceId,
+      );
+
+      const dataResult = result.getInt8(0);
+      addGattStatus("remote RSSI: " + result.getUint8(0).toString(2).padStart(8, "0") + "b, " + dataResult +"d dBm")
+    }, 1000);
+
 
     GATT_TO_GET.forEach((GattToGet) => {
       setTimeout(async () => {
@@ -131,14 +165,14 @@ const BTDeviceDetailPageContainer: React.FC<IBTDeviceDetailPageContainerProps> =
         );
 
         const dataResult = dataViewToText(result)
-        setGattStatus((old) => old + GattToGet.name + ": " + dataResult + "\n")
+        addGattStatus(GattToGet.name + ": " + dataResult)
       }, 1000);
     });
 
     // const services = await BleClient.getServices(deviceId);
     // services.services!.forEach((service) => {
     //   const output = service.UUID + ": " + service.characteristics.join(", ");
-    //   setGattStatus((old) => old + output + "\n");
+    //   addGattStatus(output);
     //   console.log(output);
     // })
   }
