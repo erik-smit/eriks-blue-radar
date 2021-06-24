@@ -19,7 +19,7 @@ import { BleClient, dataViewToNumbers, dataViewToText, dataViewToHexString, numb
 
 import { MyDeviceConfigContext, IMyDeviceConfig } from '../data/mydeviceconfig';
 import { ScanResultsContext, IMyScanResult } from '../data/scanresults';
-import { ConnectedDevicesContext } from '../data/connecteddevices';
+import { ConnectedDevicesContext, IMyConnectedDevice } from '../data/connecteddevices';
 
 import './btdevicespage.css';
 
@@ -92,26 +92,6 @@ const BTDeviceDetailPageContainer: React.FC<IBTDeviceDetailPageContainerProps> =
     setMyDeviceName(deviceId, myDeviceFormName)
   }
 
-  // rssi functionality
-  const [ rssi, setRssi ] = useState(0);
-  useEffect(() => {
-    if (myScanResult) {
-      setRssi(myScanResult.scanresult.rssi)
-    } else {
-      const interval = setInterval(async () => {
-        const result = await BleClient.readRemoteRssi(
-          deviceId,
-        );
-        const rssiResult = result.getInt8(0);
-        setRssi(rssiResult);
-        myConnectedDevice!.lastseen = Date.now();
-      }, 1000);
-      ;
-      return () => clearInterval(interval)
-    }
-  })
-
-
   const placeholderName =
     myConnectedDevice ? myConnectedDevice.device.name :
     myScanResult ? myScanResult.scanresult.localName : "unknown device";
@@ -180,7 +160,7 @@ const BTDeviceDetailPageContainer: React.FC<IBTDeviceDetailPageContainerProps> =
   return (
     <IonContent>
       <IonList>
-        <div className="rssi ion-text-center"> { rssi } </div>
+        <Rssi deviceId={ deviceId } myConnectedDevice={ myConnectedDevice } myScanResult={ myScanResult }/>
         <IonItem>
           Last Seen: { lastSeenSeconds } seconds ago
         </IonItem>
@@ -210,4 +190,42 @@ const BTDeviceDetailPageContainer: React.FC<IBTDeviceDetailPageContainerProps> =
   )
 }
 
+interface IRssiProps {
+  deviceId: string;
+  myConnectedDevice?: IMyConnectedDevice;
+  myScanResult?: IMyScanResult;
+}
+
+const Rssi: React.FC<IRssiProps> = ({ deviceId, myScanResult, myConnectedDevice }) => {
+  const [ rssi, setRssi ] = useState(0);
+  useEffect(() => {
+    if (myScanResult) {
+      setRssi(myScanResult.scanresult.rssi)
+    } else {
+      const interval = setInterval(async () => {
+        try {
+          const result = await BleClient.readRemoteRssi(
+            deviceId,
+          );
+          const rssiResult = result.getInt8(0);
+          setRssi(rssiResult);
+          myConnectedDevice!.lastseen = Date.now();
+        } catch (err) {
+          // if readRemoteRssi fails, try to connect()
+          setTimeout(async () => {
+            await BleClient.connect(deviceId);
+          }, 0);
+        }
+      }, 1000);
+      ;
+      return () => {
+        clearInterval(interval)
+      }
+    }
+  })
+
+  return (
+    <div className="rssi ion-text-center"> { rssi } </div>
+  )
+}
 export { BTDeviceDetailPage }
