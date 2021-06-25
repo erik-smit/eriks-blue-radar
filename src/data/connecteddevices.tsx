@@ -20,12 +20,11 @@ const ConnectedDevicesContext = createContext<{
 
 const ConnectedDeviceScanningStart = async (setMyConnectedDevices: React.Dispatch<React.SetStateAction<IMyConnectedDevice[]>>) => {
   let ret = await BluetoothManager_getConnectedDevices.getConnectedDevices();
-  let newMyConnectedDevices = initialConnectedDeviceState;
-  ret.devices.forEach((device) => {
-    newMyConnectedDevices.push({
+  let newMyConnectedDevices = ret.devices.map((device) => {
+    return {
       device: device,
       lastseen: Date.now()
-    })
+    }
   })
   setMyConnectedDevices(newMyConnectedDevices)
 }
