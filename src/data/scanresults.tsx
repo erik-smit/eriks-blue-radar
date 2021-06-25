@@ -20,7 +20,6 @@ const ScanResultsContext = createContext<{
 const ScanResultScanningStart = async (setMyScanResults: React.Dispatch<React.SetStateAction<IMyScanResult[]>>) => {
   setMyScanResults([]);
 
-  await BleClient.initialize();
   await BleClient.requestLEScan({
     allowDuplicates: true,
     scanMode: ScanMode.SCAN_MODE_LOW_LATENCY

@@ -222,7 +222,7 @@ const Rssi: React.FC<IRssiProps> = ({ deviceId, myScanResult, myConnectedDevice 
         clearInterval(interval)
       }
     }
-  })
+  }, [])
 
   return (
     <div className="rssi ion-text-center"> { rssi } </div>

@@ -1,7 +1,7 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { ToggleChangeEventDetail } from '@ionic/core/components'
 import React from 'react';
-import { 
+import {
   IonContent,
   IonHeader,
   IonItem,
@@ -14,7 +14,9 @@ import {
   IonToolbar,
  } from '@ionic/react';
 
-import { ConnectedDevicesContext, ConnectedDeviceScanningStart, ConnectedDeviceScanningStop } from '../data/connecteddevices'
+import { BleClient } from '@capacitor-community/bluetooth-le';
+
+import { ConnectedDevicesContext, ConnectedDeviceScanningStart } from '../data/connecteddevices'
 import { ScanResultsContext, ScanResultScanningStart, ScanResultScanningStop } from '../data/scanresults'
 import { MyDeviceConfigContext } from '../data/mydeviceconfig';
 
@@ -26,13 +28,18 @@ const BTDevicesPage: React.FC = () => {
   const { myScanResults, setMyScanResults } = useContext(ScanResultsContext);
   const { myConnectedDevices, setMyConnectedDevices } = useContext(ConnectedDevicesContext);
 
-  const handleScanToggleonChange = async (e: CustomEvent<ToggleChangeEventDetail>) => {
-    console.log(e.detail.checked);
-    if(e.detail.checked) {
+  useEffect(() => {
+    (async () => {
+      await BleClient.initialize();
       await ConnectedDeviceScanningStart(setMyConnectedDevices)
+    })();
+    return;
+  }, []);
+
+  const handleScanToggleonChange = async (e: CustomEvent<ToggleChangeEventDetail>) => {
+    if(e.detail.checked) {
       await ScanResultScanningStart(setMyScanResults)
     } else {
-      await ConnectedDeviceScanningStop(setMyConnectedDevices)
       await ScanResultScanningStop()
     }
   }
