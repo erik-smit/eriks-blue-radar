@@ -53,50 +53,63 @@ const BTDeviceDetailPageContainer: React.FC<IBTDeviceDetailPageContainerProps> =
   const { myScanResults } = useContext(ScanResultsContext);
   const myScanResult = myScanResults.find((myscanresult) => myscanresult.scanresult.device.deviceId === deviceId);
 
-  // last seen updater
-  const [ lastSeenSeconds, setLastSeenSeconds ] = useState(0);
+  return (
+    <IonContent>
+      <IonList>
+        <Rssi deviceId={ deviceId } myConnectedDevice={ myConnectedDevice } myScanResult={ myScanResult } />
+        <LastSeen myConnectedDevice={ myConnectedDevice } myScanResult={ myScanResult } />
+        <NameField deviceId={ deviceId } />
+        <IonItem> <IonLabel> MAC: { deviceId }</IonLabel></IonItem>
+        <ComeGattSome deviceId={ deviceId } />
+      </IonList>
+    </IonContent>
+  )
+}
+
+interface IRssiProps {
+  deviceId: string;
+  myConnectedDevice?: IMyConnectedDevice;
+  myScanResult?: IMyScanResult;
+}
+
+const Rssi: React.FC<IRssiProps> = ({ deviceId, myScanResult, myConnectedDevice }) => {
+  const [ rssi, setRssi ] = useState(0);
   useEffect(() => {
-    const interval = setInterval(() => {
-      const lastseen =
-        myConnectedDevice ? myConnectedDevice.lastseen :
-        myScanResult ? myScanResult.lastseen :
-        0
-      setLastSeenSeconds(Math.round((Date.now()-lastseen) / 1000))
-    }, 1000);
-    return () => clearInterval(interval);
-  })
-
-  // maybe should be refactored into myDeviceConfig?
-  const myDeviceConfigAddIfNotExist = (myDeviceConfigs: IMyDeviceConfig[], deviceId: string): IMyDeviceConfig => {
-    let myDeviceConfig = myDeviceConfigs.find((device) => device.deviceId === deviceId)
-    if (typeof myDeviceConfig === "undefined") {
-      myDeviceConfig = {
-        deviceId: deviceId,
-        name: undefined
+    if (myScanResult) {
+      setRssi(myScanResult.scanresult.rssi)
+    } else {
+      const interval = setInterval(async () => {
+        try {
+          const result = await BleClient.readRemoteRssi(
+            deviceId,
+          );
+          const rssiResult = result.getInt8(0);
+          setRssi(rssiResult);
+          myConnectedDevice!.lastseen = Date.now();
+        } catch (err) {
+          // if readRemoteRssi fails, try to connect()
+          setTimeout(async () => {
+            await BleClient.connect(deviceId);
+          }, 0);
+        }
+      }, 1000);
+      ;
+      return () => {
+        clearInterval(interval)
       }
-      myDeviceConfigs.push(myDeviceConfig);
     }
-    return myDeviceConfig
-  }
+  }, [])
 
-  // name update functionality
-  const [ myDeviceFormName, setMyDeviceFormName ] = useState<string>(myDeviceConfig?.name ? myDeviceConfig?.name : "");
-  const setMyDeviceName = (deviceId: string, name: string) => {
-    const newMyDeviceConfigs = [...myDeviceConfigs]
-    const myDeviceConfig = myDeviceConfigAddIfNotExist(newMyDeviceConfigs, deviceId)
-    myDeviceConfig.name = myDeviceFormName;
-    setMyDeviceConfigs(newMyDeviceConfigs)
-  }
+  return (
+    <div className="rssi ion-text-center"> { rssi } </div>
+  )
+}
 
-  const handleNameInputBlur = async () => {
-    setMyDeviceName(deviceId, myDeviceFormName)
-  }
+interface IComeGattSomeProps {
+  deviceId: string;
+}
 
-  const placeholderName =
-    myConnectedDevice ? myConnectedDevice.device.name :
-    myScanResult ? myScanResult.scanresult.localName : "unknown device";
-
-
+const ComeGattSome: React.FC<IComeGattSomeProps> = ({ deviceId }) => {
   const GENERIC_ACCESS_SERVICE = numberToUUID(0x1800);
   const GENERIC_ACCESS_SERVICE_DEVICE_NAME = numberToUUID(0x2A00);
 
@@ -158,74 +171,99 @@ const BTDeviceDetailPageContainer: React.FC<IBTDeviceDetailPageContainerProps> =
   }
 
   return (
-    <IonContent>
-      <IonList>
-        <Rssi deviceId={ deviceId } myConnectedDevice={ myConnectedDevice } myScanResult={ myScanResult }/>
-        <IonItem>
-          Last Seen: { lastSeenSeconds } seconds ago
-        </IonItem>
-        <IonItem>
-          <IonLabel> Name: </IonLabel>
-          <IonInput
-            placeholder={ placeholderName }
-            onBlur={ async () => await handleNameInputBlur() }
-            onIonChange={ e => setMyDeviceFormName(e.detail.value!) }
-            value={myDeviceFormName}
-              />
-        </IonItem>
-        <IonItem>
-          <IonLabel> MAC: { deviceId }</IonLabel>
-        </IonItem>
-        <IonButton
-          onClick={ async () => await handleGattClick() }>
-          COME GATT SOME!
+    <IonItem>
+      <IonButton
+        onClick={ async () => await handleGattClick() }>
+        COME GATT SOME!
         </IonButton>
-        <IonItem>
-          <IonTextarea>
-          { gattStatus }
-          </IonTextarea>
-        </IonItem>
-      </IonList>
-    </IonContent>
+      <IonTextarea>
+      { gattStatus }
+      </IonTextarea>
+    </IonItem>
   )
 }
 
-interface IRssiProps {
-  deviceId: string;
+interface ILastSeenProps {
   myConnectedDevice?: IMyConnectedDevice;
   myScanResult?: IMyScanResult;
 }
 
-const Rssi: React.FC<IRssiProps> = ({ deviceId, myScanResult, myConnectedDevice }) => {
-  const [ rssi, setRssi ] = useState(0);
+const LastSeen: React.FC<ILastSeenProps> = ({ myConnectedDevice, myScanResult }) => {
+  // last seen updater
+  const [ lastSeenSeconds, setLastSeenSeconds ] = useState(0);
   useEffect(() => {
-    if (myScanResult) {
-      setRssi(myScanResult.scanresult.rssi)
-    } else {
-      const interval = setInterval(async () => {
-        try {
-          const result = await BleClient.readRemoteRssi(
-            deviceId,
-          );
-          const rssiResult = result.getInt8(0);
-          setRssi(rssiResult);
-          myConnectedDevice!.lastseen = Date.now();
-        } catch (err) {
-          // if readRemoteRssi fails, try to connect()
-          setTimeout(async () => {
-            await BleClient.connect(deviceId);
-          }, 0);
-        }
-      }, 1000);
-      ;
-      return () => {
-        clearInterval(interval)
-      }
-    }
-  }, [])
+    const interval = setInterval(() => {
+      const lastseen =
+        myConnectedDevice ? myConnectedDevice.lastseen :
+        myScanResult ? myScanResult.lastseen :
+        0
+      setLastSeenSeconds(Math.round((Date.now()-lastseen) / 1000))
+    }, 1000);
+    return () => clearInterval(interval);
+  })
 
   return (
-    <div className="rssi ion-text-center"> { rssi } </div>
+    <IonItem>
+      Last Seen: { lastSeenSeconds } seconds ago
+    </IonItem>
   )
 }
+
+interface INameFieldProps {
+  deviceId: string;
+}
+
+const NameField: React.FC<INameFieldProps> = ({ deviceId }) => {
+  const { myConnectedDevices } = useContext(ConnectedDevicesContext);
+  const myConnectedDevice = myConnectedDevices.find((myconnecteddevice) => myconnecteddevice.device.deviceId === deviceId);
+  
+  const { myDeviceConfigs, setMyDeviceConfigs } = useContext(MyDeviceConfigContext);
+  const myDeviceConfig = myDeviceConfigs.find((device) => device.deviceId === deviceId)
+
+  const { myScanResults } = useContext(ScanResultsContext);
+  const myScanResult = myScanResults.find((myscanresult) => myscanresult.scanresult.device.deviceId === deviceId);
+
+  // maybe should be refactored into myDeviceConfig?
+  const myDeviceConfigAddIfNotExist = (myDeviceConfigs: IMyDeviceConfig[], deviceId: string): IMyDeviceConfig => {
+    let myDeviceConfig = myDeviceConfigs.find((device) => device.deviceId === deviceId)
+    if (typeof myDeviceConfig === "undefined") {
+      myDeviceConfig = {
+        deviceId: deviceId,
+        name: undefined
+      }
+      myDeviceConfigs.push(myDeviceConfig);
+    }
+    return myDeviceConfig
+  }
+
+  // name update functionality
+  const [ myDeviceFormName, setMyDeviceFormName ] = useState<string>(myDeviceConfig?.name ? myDeviceConfig?.name : "");
+  const setMyDeviceName = (deviceId: string, name: string) => {
+    const newMyDeviceConfigs = [...myDeviceConfigs]
+    const myDeviceConfig = myDeviceConfigAddIfNotExist(newMyDeviceConfigs, deviceId)
+    myDeviceConfig.name = myDeviceFormName;
+    setMyDeviceConfigs(newMyDeviceConfigs)
+  }
+
+  const handleNameInputBlur = async () => {
+    setMyDeviceName(deviceId, myDeviceFormName)
+  }
+
+  const placeholderName =
+    myConnectedDevice ? myConnectedDevice.device.name :
+    myScanResult ? myScanResult.scanresult.localName : "unknown device";
+
+  return (
+    <IonItem>
+      <IonLabel> Name: </IonLabel>
+      <IonInput
+        placeholder={ placeholderName }
+        onBlur={ async () => await handleNameInputBlur() }
+        onIonChange={ e => setMyDeviceFormName(e.detail.value!) }
+        value={myDeviceFormName}
+          />
+    </IonItem>
+  )
+}
+
 export { BTDeviceDetailPage }
