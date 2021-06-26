@@ -58,7 +58,11 @@ const BTDeviceDetailPageContainer: React.FC<IBTDeviceDetailPageContainerProps> =
       <IonList>
         <Rssi deviceId={ deviceId } myConnectedDevice={ myConnectedDevice } myScanResult={ myScanResult } />
         <LastSeen myConnectedDevice={ myConnectedDevice } myScanResult={ myScanResult } />
-        <NameField deviceId={ deviceId } />
+        <NameField
+          deviceId={ deviceId } myConnectedDevice={ myConnectedDevice }
+          myDeviceConfig={ myDeviceConfig} myDeviceConfigs={ myDeviceConfigs }
+          setMyDeviceConfigs={ setMyDeviceConfigs }
+          myScanResult={ myScanResult } />
         <IonItem> <IonLabel> MAC: { deviceId }</IonLabel></IonItem>
         <ComeGattSome deviceId={ deviceId } />
       </IonList>
@@ -211,18 +215,14 @@ const LastSeen: React.FC<ILastSeenProps> = ({ myConnectedDevice, myScanResult })
 
 interface INameFieldProps {
   deviceId: string;
+  myConnectedDevice?: IMyConnectedDevice;
+  myDeviceConfig?: IMyDeviceConfig;
+  myDeviceConfigs: IMyDeviceConfig[];
+  myScanResult?: IMyScanResult;
+  setMyDeviceConfigs: React.Dispatch<React.SetStateAction<IMyDeviceConfig[]>>;
 }
 
-const NameField: React.FC<INameFieldProps> = ({ deviceId }) => {
-  const { myConnectedDevices } = useContext(ConnectedDevicesContext);
-  const myConnectedDevice = myConnectedDevices.find((myconnecteddevice) => myconnecteddevice.device.deviceId === deviceId);
-  
-  const { myDeviceConfigs, setMyDeviceConfigs } = useContext(MyDeviceConfigContext);
-  const myDeviceConfig = myDeviceConfigs.find((device) => device.deviceId === deviceId)
-
-  const { myScanResults } = useContext(ScanResultsContext);
-  const myScanResult = myScanResults.find((myscanresult) => myscanresult.scanresult.device.deviceId === deviceId);
-
+const NameField: React.FC<INameFieldProps> = ({ deviceId, myConnectedDevice, myDeviceConfig, myDeviceConfigs, myScanResult, setMyDeviceConfigs }) => {
   // maybe should be refactored into myDeviceConfig?
   const myDeviceConfigAddIfNotExist = (myDeviceConfigs: IMyDeviceConfig[], deviceId: string): IMyDeviceConfig => {
     let myDeviceConfig = myDeviceConfigs.find((device) => device.deviceId === deviceId)
