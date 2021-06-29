@@ -47,12 +47,15 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "npm run eslint",
+    "fmt": "npm run eslint -- --fix",
+    "eslint": "eslint . --ext .ts"
   },
   "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
+    "extends": "@ionic/eslint-config/recommended",
+    "plugins": [
+      "only-warn"
     ]
   },
   "browserslist": {
@@ -68,7 +71,10 @@
     ]
   },
   "devDependencies": {
-    "@capacitor/cli": "3.0.0"
+    "@capacitor/cli": "3.0.0",
+    "@ionic/eslint-config": "^0.3.0",
+    "eslint": "^7.29.0",
+    "eslint-plugin-only-warn": "^1.0.2"
   },
   "description": "An Ionic project"
 }
