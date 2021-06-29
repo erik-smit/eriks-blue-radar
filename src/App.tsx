@@ -13,9 +13,6 @@ import {
 import { IonReactRouter } from '@ionic/react-router';
 
 import { AboutPage } from './components/aboutpage';
-import { TodoPage } from './components/todopage';
-import { TodoEditPage } from './components/todoeditpage';
-import { TodosContextProvider } from './data/todo';
 import { ConnectedDeviceContextProvider } from './data/connecteddevices'
 import { ScanResultContextProvider } from './data/scanresults';
 import { MyDeviceConfigContextProvider } from './data/mydeviceconfig';
@@ -46,39 +43,35 @@ const App: React.FC = () => {
   <ConnectedDeviceContextProvider>
     <MyDeviceConfigContextProvider>
       <ScanResultContextProvider>
-        <TodosContextProvider>
-          <IonApp>
-            <IonReactRouter>
-              <IonTabs>
-                <IonTabBar slot="bottom">
-                  <IonTabButton tab="btdevices" href="/btdevices">
-                    <IonIcon icon={home} />
-                    <IonLabel>Devices</IonLabel>
-                  </IonTabButton>
+        <IonApp>
+          <IonReactRouter>
+            <IonTabs>
+              <IonTabBar slot="bottom">
+                <IonTabButton tab="btdevices" href="/btdevices">
+                  <IonIcon icon={home} />
+                  <IonLabel>Devices</IonLabel>
+                </IonTabButton>
 
-                  <IonTabButton tab="search" href="/btdevicedetail/">
-                    <IonIcon icon={search} />
-                    <IonLabel>Detail</IonLabel>
-                  </IonTabButton>
+                <IonTabButton tab="search" href="/btdevicedetail/">
+                  <IonIcon icon={search} />
+                  <IonLabel>Detail</IonLabel>
+                </IonTabButton>
 
-                  <IonTabButton tab="about" href="/about">
-                    <IonIcon icon={settings} />
-                    <IonLabel>About</IonLabel>
-                  </IonTabButton>
-                </IonTabBar>
+                <IonTabButton tab="about" href="/about">
+                  <IonIcon icon={settings} />
+                  <IonLabel>About</IonLabel>
+                </IonTabButton>
+              </IonTabBar>
 
-                <IonRouterOutlet>
-                  <Route path="/btdevices" component={BTDevicesPage} />
-                  <Route path="/btdevicedetail/:deviceId" component={BTDeviceDetailPage} />
-                  <Route path="/todo" component={TodoPage} />
-                  <Route path="/todoedit/:id" component={TodoEditPage} />
-                  <Route path="/about" component={AboutPage} />
-                  <Route exact path="/" render={() => <Redirect to="/btdevices" />} />
-                </IonRouterOutlet>
-              </IonTabs>
-            </IonReactRouter>
-          </IonApp>
-        </TodosContextProvider>
+              <IonRouterOutlet>
+                <Route path="/btdevices" component={BTDevicesPage} />
+                <Route path="/btdevicedetail/:deviceId" component={BTDeviceDetailPage} />
+                <Route path="/about" component={AboutPage} />
+                <Route exact path="/" render={() => <Redirect to="/btdevices" />} />
+              </IonRouterOutlet>
+            </IonTabs>
+          </IonReactRouter>
+        </IonApp>
       </ScanResultContextProvider>
     </MyDeviceConfigContextProvider>
     </ConnectedDeviceContextProvider>
