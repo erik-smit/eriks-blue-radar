@@ -1,6 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
-import { useParams } from 'react-router';
-import React from 'react';
+import { BleClient, dataViewToText, numberToUUID } from '@capacitor-community/bluetooth-le';
 import { 
   IonButton,
   IonContent,
@@ -14,12 +12,17 @@ import {
   IonTitle,
   IonToolbar
  } from '@ionic/react';
+import React, { useContext, useEffect, useState } from 'react';
+import { useParams } from 'react-router';
 
-import { BleClient, dataViewToNumbers, dataViewToText, dataViewToHexString, numberToUUID } from '@capacitor-community/bluetooth-le';
 
-import { MyDeviceConfigContext, IMyDeviceConfig } from '../data/mydeviceconfig';
-import { ScanResultsContext, IMyScanResult } from '../data/scanresults';
-import { ConnectedDevicesContext, IMyConnectedDevice } from '../data/connecteddevices';
+
+import type { IMyConnectedDevice } from '../data/connecteddevices';
+import { ConnectedDevicesContext } from '../data/connecteddevices';
+import type { IMyDeviceConfig } from '../data/mydeviceconfig';
+import { MyDeviceConfigContext } from '../data/mydeviceconfig';
+import type { IMyScanResult } from '../data/scanresults';
+import { ScanResultsContext } from '../data/scanresults';
 
 import './btdevicespage.css';
 
@@ -81,7 +84,7 @@ const Rssi: React.FC<IRssiProps> = ({ deviceId, myScanResult, myConnectedDevice 
   useEffect(() => {
     if (myScanResult) {
       setRssi(myScanResult.scanresult.rssi)
-    } else {
+    } else if (myConnectedDevice) {
       const interval = setInterval(async () => {
         try {
           const result = await BleClient.readRemoteRssi(
@@ -89,7 +92,7 @@ const Rssi: React.FC<IRssiProps> = ({ deviceId, myScanResult, myConnectedDevice 
           );
           const rssiResult = result.getInt8(0);
           setRssi(rssiResult);
-          myConnectedDevice!.lastseen = Date.now();
+          myConnectedDevice.lastseen = Date.now();
         } catch (err) {
           // if readRemoteRssi fails, try to connect()
           setTimeout(async () => {
@@ -132,7 +135,7 @@ const ComeGattSome: React.FC<IComeGattSomeProps> = ({ deviceId }) => {
   ]
 
   const [ gattStatus, setGattStatus ] = useState("");
-  const addGattStatus = (line: String) => {
+  const addGattStatus = (line: string) => {
     setGattStatus((old) => line + "\n" + old)
   }
 
@@ -238,7 +241,7 @@ const NameField: React.FC<INameFieldProps> = ({ deviceId, myConnectedDevice, myD
 
   // name update functionality
   const [ myDeviceFormName, setMyDeviceFormName ] = useState<string>(myDeviceConfig?.name ? myDeviceConfig?.name : "");
-  const setMyDeviceName = (deviceId: string, name: string) => {
+  const setMyDeviceName = (deviceId: string) => {
     const newMyDeviceConfigs = [...myDeviceConfigs]
     const myDeviceConfig = myDeviceConfigAddIfNotExist(newMyDeviceConfigs, deviceId)
     myDeviceConfig.name = myDeviceFormName;
@@ -246,7 +249,7 @@ const NameField: React.FC<INameFieldProps> = ({ deviceId, myConnectedDevice, myD
   }
 
   const handleNameInputBlur = async () => {
-    setMyDeviceName(deviceId, myDeviceFormName)
+    setMyDeviceName(deviceId)
   }
 
   const placeholderName =
@@ -259,7 +262,7 @@ const NameField: React.FC<INameFieldProps> = ({ deviceId, myConnectedDevice, myD
       <IonInput
         placeholder={ placeholderName }
         onBlur={ async () => await handleNameInputBlur() }
-        onIonChange={ e => setMyDeviceFormName(e.detail.value!) }
+        onIonChange={ e => setMyDeviceFormName(e.detail.value ? e.detail.value : "") }
         value={myDeviceFormName}
           />
     </IonItem>
