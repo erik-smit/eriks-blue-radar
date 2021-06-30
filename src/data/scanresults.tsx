@@ -1,6 +1,6 @@
-import { ScanMode, ScanResult } from '@capacitor-community/bluetooth-le';
-import { BleClient } from '@capacitor-community/bluetooth-le';
-import { createContext, useEffect, useState, useReducer, useContext } from 'react';
+import type { ScanResult } from '@capacitor-community/bluetooth-le';
+import { ScanMode , BleClient } from '@capacitor-community/bluetooth-le';
+import { createContext, useState } from 'react';
 
 interface IMyScanResult {
   scanresult: ScanResult;
@@ -17,7 +17,7 @@ const ScanResultsContext = createContext<{
     setMyScanResults: () => undefined,
   });
 
-const ScanResultScanningStart = async (setMyScanResults: React.Dispatch<React.SetStateAction<IMyScanResult[]>>) => {
+const ScanResultScanningStart = async (setMyScanResults: React.Dispatch<React.SetStateAction<IMyScanResult[]>>): Promise<void> => {
   setMyScanResults([]);
 
   await BleClient.requestLEScan({
@@ -45,7 +45,7 @@ const ScanResultScanningStart = async (setMyScanResults: React.Dispatch<React.Se
   });
 }
 
-const ScanResultScanningStop = async () => {
+const ScanResultScanningStop = async (): Promise<void> => {
   await BleClient.stopLEScan();
 }
 const ScanResultContextProvider: React.FC = ({children}) => {

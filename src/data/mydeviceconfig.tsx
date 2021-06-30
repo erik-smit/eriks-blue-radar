@@ -1,5 +1,5 @@
-import { createContext, useEffect, useState, useReducer, useContext } from 'react';
 import { Storage } from '@capacitor/storage';
+import { createContext, useEffect, useState } from 'react';
 
 interface IMyDeviceConfig {
   deviceId: string;

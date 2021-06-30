@@ -1,6 +1,5 @@
-import { useContext, useEffect } from 'react';
-import { ToggleChangeEventDetail } from '@ionic/core/components'
-import React from 'react';
+import { BleClient } from '@capacitor-community/bluetooth-le';
+import type { ToggleChangeEventDetail } from '@ionic/core/components'
 import {
   IonContent,
   IonHeader,
@@ -13,13 +12,12 @@ import {
   IonToggle,
   IonToolbar,
  } from '@ionic/react';
+import React, { useContext, useEffect } from 'react';
 
-import { BleClient } from '@capacitor-community/bluetooth-le';
 
 import { ConnectedDevicesContext, ConnectedDeviceScanningStart } from '../data/connecteddevices'
-import { ScanResultsContext, ScanResultScanningStart, ScanResultScanningStop } from '../data/scanresults'
 import { MyDeviceConfigContext } from '../data/mydeviceconfig';
-
+import { ScanResultsContext, ScanResultScanningStart, ScanResultScanningStop } from '../data/scanresults'
 import WifiIcon from "../icons/ionic-icon-wifi-outline-eriks-blue-radar";
 import './btdevicespage.css';
 
@@ -81,7 +79,7 @@ const ConnectedDeviceRowEntry: React.FC<IConnectedDeviceRowContainerProps> = ({ 
   const myDeviceConfig = myDeviceConfigs.find((device) => device.deviceId === connecteddevice.device.deviceId)
 
   const displayName = myDeviceConfig?.name ? myDeviceConfig.name : 
-    connecteddevice.device.name! ? connecteddevice.device.name! : "unknown device";
+    connecteddevice.device.name ? connecteddevice.device.name : "unknown device";
 
   const displayNameClass = myDeviceConfig?.name ? "displayname-set" : "displayname-default"
 
@@ -108,7 +106,7 @@ const ScanResultRowEntry: React.FC<IScanResultRowContainerProps> = ({ index }) =
   const myDeviceConfig = myDeviceConfigs.find((device) => device.deviceId === myscanresult.scanresult.device.deviceId)
 
   const displayName = myDeviceConfig?.name ? myDeviceConfig.name : 
-    myscanresult.scanresult.localName! ? myscanresult.scanresult.localName! : "unknown device";
+    myscanresult.scanresult.localName ? myscanresult.scanresult.localName : "unknown device";
 
   const displayNameClass = myDeviceConfig?.name ? "displayname-set" : "displayname-default"
 

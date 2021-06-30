@@ -1,6 +1,6 @@
-import { createContext, useEffect, useState, useReducer, useContext } from 'react';
-
 import type { BleDevice } from '@capacitor-community/bluetooth-le';
+import { createContext, useState } from 'react';
+
 import BluetoothManager_getConnectedDevices from '../plugins/BluetoothManager_getConnectedDevices';
 
 interface IMyConnectedDevice {
@@ -18,9 +18,9 @@ const ConnectedDevicesContext = createContext<{
     setMyConnectedDevices: () => undefined,
   });
 
-const ConnectedDeviceScanningStart = async (setMyConnectedDevices: React.Dispatch<React.SetStateAction<IMyConnectedDevice[]>>) => {
-  let ret = await BluetoothManager_getConnectedDevices.getConnectedDevices();
-  let newMyConnectedDevices = ret.devices.map((device) => {
+const ConnectedDeviceScanningStart = async (setMyConnectedDevices: React.Dispatch<React.SetStateAction<IMyConnectedDevice[]>>): Promise<void> => {
+  const ret = await BluetoothManager_getConnectedDevices.getConnectedDevices();
+  const newMyConnectedDevices = ret.devices.map((device) => {
     return {
       device: device,
       lastseen: Date.now()
@@ -29,7 +29,7 @@ const ConnectedDeviceScanningStart = async (setMyConnectedDevices: React.Dispatc
   setMyConnectedDevices(newMyConnectedDevices)
 }
 
-const ConnectedDeviceScanningStop = async (setMyConnectedDevices: React.Dispatch<React.SetStateAction<IMyConnectedDevice[]>>) => {
+const ConnectedDeviceScanningStop = async (setMyConnectedDevices: React.Dispatch<React.SetStateAction<IMyConnectedDevice[]>>): Promise<void> => {
   setMyConnectedDevices([]);  
 }
 

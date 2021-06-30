@@ -1,6 +1,3 @@
-import { home, search, settings } from "ionicons/icons"
-import React from 'react';
-import { Redirect, Route } from 'react-router-dom';
 import { 
   IonApp, 
   IonIcon, 
@@ -11,13 +8,16 @@ import {
   IonTabButton,
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
+import { home, search, settings } from "ionicons/icons"
+import React from 'react';
+import { Redirect, Route } from 'react-router-dom';
 
 import { AboutPage } from './components/aboutpage';
-import { ConnectedDeviceContextProvider } from './data/connecteddevices'
-import { ScanResultContextProvider } from './data/scanresults';
-import { MyDeviceConfigContextProvider } from './data/mydeviceconfig';
-import { BTDevicesPage } from './components/btdevicespage';
 import { BTDeviceDetailPage } from './components/btdevicedetailpage';
+import { BTDevicesPage } from './components/btdevicespage';
+import { ConnectedDeviceContextProvider } from './data/connecteddevices'
+import { MyDeviceConfigContextProvider } from './data/mydeviceconfig';
+import { ScanResultContextProvider } from './data/scanresults';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';

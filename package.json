@@ -50,7 +50,7 @@
     "eject": "react-scripts eject",
     "lint": "npm run eslint",
     "fmt": "npm run eslint -- --fix",
-    "eslint": "eslint . --ext .ts"
+    "eslint": "eslint . --ext .ts --ext .tsx"
   },
   "eslintConfig": {
     "extends": "@ionic/eslint-config/recommended",
