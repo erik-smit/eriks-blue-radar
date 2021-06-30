@@ -8,7 +8,6 @@ import {
   IonToolbar,  } from '@ionic/react';
 import React, { useState } from 'react';
 
-
 import BluetoothManager_getConnectedDevices from '../plugins/BluetoothManager_getConnectedDevices';
 
 const AboutPage: React.FC = () => {

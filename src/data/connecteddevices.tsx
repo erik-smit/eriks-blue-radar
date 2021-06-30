@@ -18,7 +18,7 @@ const ConnectedDevicesContext = createContext<{
     setMyConnectedDevices: () => undefined,
   });
 
-const ConnectedDeviceScanningStart = async (setMyConnectedDevices: React.Dispatch<React.SetStateAction<IMyConnectedDevice[]>>): Promise<void> => {
+const ConnectedDeviceGetDevices = async (setMyConnectedDevices: React.Dispatch<React.SetStateAction<IMyConnectedDevice[]>>): Promise<void> => {
   const ret = await BluetoothManager_getConnectedDevices.getConnectedDevices();
   const newMyConnectedDevices = ret.devices.map((device) => {
     return {
@@ -27,10 +27,6 @@ const ConnectedDeviceScanningStart = async (setMyConnectedDevices: React.Dispatc
     }
   })
   setMyConnectedDevices(newMyConnectedDevices)
-}
-
-const ConnectedDeviceScanningStop = async (setMyConnectedDevices: React.Dispatch<React.SetStateAction<IMyConnectedDevice[]>>): Promise<void> => {
-  setMyConnectedDevices([]);  
 }
 
 const ConnectedDeviceContextProvider: React.FC = ({children}) => {
@@ -43,5 +39,5 @@ const ConnectedDeviceContextProvider: React.FC = ({children}) => {
   )
 }
 
-export { ConnectedDevicesContext, ConnectedDeviceContextProvider, ConnectedDeviceScanningStart, ConnectedDeviceScanningStop }
+export { ConnectedDevicesContext, ConnectedDeviceContextProvider, ConnectedDeviceGetDevices }
 export type { IMyConnectedDevice }

@@ -15,8 +15,6 @@ import {
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
-
-
 import type { IMyConnectedDevice } from '../data/connecteddevices';
 import { ConnectedDevicesContext } from '../data/connecteddevices';
 import type { IMyDeviceConfig } from '../data/mydeviceconfig';
@@ -24,7 +22,7 @@ import { MyDeviceConfigContext } from '../data/mydeviceconfig';
 import type { IMyScanResult } from '../data/scanresults';
 import { ScanResultsContext } from '../data/scanresults';
 
-import './btdevicespage.css';
+import './devicespage.css';
 
 const BTDeviceDetailPage: React.FC = () => {
   const params = useParams<{ deviceId: string }>();

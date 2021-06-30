@@ -1,3 +1,4 @@
+import { BleClient } from '@capacitor-community/bluetooth-le';
 import { 
   IonApp, 
   IonIcon, 
@@ -8,13 +9,14 @@ import {
   IonTabButton,
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { home, search, settings } from "ionicons/icons"
-import React from 'react';
+import { flashlight, gitBranch, radio, settings } from "ionicons/icons"
+import React, { useEffect } from 'react';
 import { Redirect, Route } from 'react-router-dom';
 
 import { AboutPage } from './components/aboutpage';
 import { BTDeviceDetailPage } from './components/btdevicedetailpage';
-import { BTDevicesPage } from './components/btdevicespage';
+import { ConnectedDevicesPage } from './components/connecteddevicespage';
+import { ScannedDevicesPage } from './components/scanneddevicespage';
 import { ConnectedDeviceContextProvider } from './data/connecteddevices'
 import { MyDeviceConfigContextProvider } from './data/mydeviceconfig';
 import { ScanResultContextProvider } from './data/scanresults';
@@ -39,6 +41,13 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 
 const App: React.FC = () => {
+  useEffect(() => {
+    (async () => {
+      await BleClient.initialize();
+    })();
+    return;
+  }, []);
+  
   return (
   <ConnectedDeviceContextProvider>
     <MyDeviceConfigContextProvider>
@@ -47,14 +56,19 @@ const App: React.FC = () => {
           <IonReactRouter>
             <IonTabs>
               <IonTabBar slot="bottom">
-                <IonTabButton tab="btdevices" href="/btdevices">
-                  <IonIcon icon={home} />
-                  <IonLabel>Devices</IonLabel>
+                <IonTabButton tab="connecteddevices" href="/connecteddevices">
+                  <IonIcon icon={gitBranch} />
+                  <IonLabel>Connected Devices</IonLabel>
+                </IonTabButton>
+
+                <IonTabButton tab="scanneddevices" href="/scanneddevices">
+                  <IonIcon icon={radio} />
+                  <IonLabel>Scan Devices</IonLabel>
                 </IonTabButton>
 
                 <IonTabButton tab="search" href="/btdevicedetail/">
-                  <IonIcon icon={search} />
-                  <IonLabel>Detail</IonLabel>
+                  <IonIcon icon={flashlight} />
+                  <IonLabel>Device Radar</IonLabel>
                 </IonTabButton>
 
                 <IonTabButton tab="about" href="/about">
@@ -64,10 +78,11 @@ const App: React.FC = () => {
               </IonTabBar>
 
               <IonRouterOutlet>
-                <Route path="/btdevices" component={BTDevicesPage} />
+                <Route path="/scanneddevices" component={ScannedDevicesPage} />
                 <Route path="/btdevicedetail/:deviceId" component={BTDeviceDetailPage} />
+                <Route path="/connecteddevices" component={ConnectedDevicesPage} />
                 <Route path="/about" component={AboutPage} />
-                <Route exact path="/" render={() => <Redirect to="/btdevices" />} />
+                <Route exact path="/" render={() => <Redirect to="/connecteddevices" />} />
               </IonRouterOutlet>
             </IonTabs>
           </IonReactRouter>
