@@ -1,17 +1,12 @@
 import { 
-  IonButton,
   IonContent, 
   IonHeader,
-  IonLabel,
   IonPage, 
   IonTitle, 
   IonToolbar,  } from '@ionic/react';
-import React, { useState } from 'react';
-
-import BluetoothManager_getConnectedDevices from '../plugins/BluetoothManager_getConnectedDevices';
+import React from 'react';
 
 const AboutPage: React.FC = () => {
-  const [ someData, setSomeData ] = useState("");
   return (
     <IonPage>
       <IonHeader>
@@ -22,16 +17,6 @@ const AboutPage: React.FC = () => {
       <IonContent>
         <h1>Put stuff here</h1>
         https://github.com/erik-smit/eriks-blue-radar
-        <IonButton onClick={ async () => {
-          const ret = await BluetoothManager_getConnectedDevices.getConnectedDevices();
-          setSomeData(
-            JSON.stringify(ret.devices)
-            );
-        }}
-        >press there</IonButton>
-      <IonLabel>
-        { someData }
-      </IonLabel>
       </IonContent>
     </IonPage>
   );
