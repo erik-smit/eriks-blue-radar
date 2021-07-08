@@ -17,10 +17,12 @@ const ConnectedDevicesPage: React.FC = () => {
   const { myConnectedDevices, setMyConnectedDevices } = useContext(ConnectedDevicesContext);
 
     useEffect(() => {
-    const interval = setInterval(async () => {
-      await ConnectedDeviceGetDevices(setMyConnectedDevices)
-    }, 10000);
-    ;
+      setTimeout(async () => {
+        await ConnectedDeviceGetDevices(setMyConnectedDevices)
+      }, 0);
+      const interval = setInterval(async () => {
+        await ConnectedDeviceGetDevices(setMyConnectedDevices)
+      }, 10000);
     return () => {
       clearInterval(interval)
     }
