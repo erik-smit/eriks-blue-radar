@@ -2,8 +2,5 @@
 	"appId": "io.ionic.starter",
 	"appName": "eriks-blue-radar",
 	"webDir": "build",
-	"bundledWebRuntime": false,
-	"server": {
-		"url": "http://192.168.18.237:8100"
-	}
+	"bundledWebRuntime": false
 }

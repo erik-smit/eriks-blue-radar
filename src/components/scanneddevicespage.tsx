@@ -65,17 +65,17 @@ const ScanResultRowEntry: React.FC<IScanResultRowContainerProps> = ({ index }) =
 
   const displayNameClass = myDeviceConfig?.name ? "displayname-set" : "displayname-default"
 
-  const rssi = myscanresult.scanresult.rssi;
   const signalstrengthClass =
-    rssi > -60 ? "signalstrength-60" :
-    rssi > -80 ? "signalstrength-80" :
+    myscanresult.scanresult.rssi == undefined ? "signalstrength-100":
+    myscanresult.scanresult.rssi > -60 ? "signalstrength-60" :
+    myscanresult.scanresult.rssi > -80 ? "signalstrength-80" :
     "signalstrength-100"
 
   return (
     <IonItem routerLink={`/btdevicedetail/${myscanresult.scanresult.device.deviceId}`} detail={false}>
       <div className="ion-text-center ion-padding-end" style={{ maxWidth: "20%" }}>
         <div className={ "signalstrength " + signalstrengthClass }> <WifiIcon /> </div>
-        <span> { rssi } </span>
+        <span> { myscanresult.scanresult.rssi } </span>
       </div>
       <div className="ion-text-left ion-padding-vertical" >
         <div>

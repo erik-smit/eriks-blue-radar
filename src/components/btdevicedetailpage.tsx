@@ -80,19 +80,19 @@ interface IRssiProps {
 const Rssi: React.FC<IRssiProps> = ({ deviceId, myScanResult, myConnectedDevice }) => {
   const [ rssi, setRssi ] = useState(0);
   useEffect(() => {
-    if (myScanResult) {
+    if (myScanResult && myScanResult.scanresult.rssi) {
       setRssi(myScanResult.scanresult.rssi)
     } else if (myConnectedDevice) {
       const interval = setInterval(async () => {
         try {
-          const result = await BleClient.readRemoteRssi(
+          const result = await BleClient.readRssi(
             deviceId,
           );
-          const rssiResult = result.getInt8(0);
+          const rssiResult = result;
           setRssi(rssiResult);
           myConnectedDevice.lastseen = Date.now();
         } catch (err) {
-          // if readRemoteRssi fails, try to connect()
+          // if readRssi fails, try to connect()
           setTimeout(async () => {
             await BleClient.connect(deviceId);
           }, 0);
@@ -145,12 +145,12 @@ const ComeGattSome: React.FC<IComeGattSomeProps> = ({ deviceId }) => {
     addGattStatus("connected to: " + deviceId)
 
     setTimeout(async () => {
-      const result = await BleClient.readRemoteRssi(
+      const result = await BleClient.readRssi(
         deviceId,
       );
 
-      const dataResult = result.getInt8(0);
-      addGattStatus("remote RSSI: " + result.getUint8(0).toString(2).padStart(8, "0") + "b, " + dataResult +"d dBm")
+      const dataResult = result;
+      addGattStatus("remote RSSI: " + result.toString(2).padStart(8, "0") + "b, " + dataResult +"d dBm")
     }, 1000);
 
 
