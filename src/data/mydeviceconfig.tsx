@@ -1,4 +1,4 @@
-import { Storage } from '@capacitor/storage';
+import { Preferences } from '@capacitor/preferences';
 import { createContext, useEffect, useState } from 'react';
 
 interface IMyDeviceConfig {
@@ -22,13 +22,13 @@ const MyDeviceConfigContextProvider: React.FC = ({children}) => {
   const [ myDeviceConfigs, realSetMyDeviceConfigs ] = useState(initialMyDeviceConfigState)
 
   const setMyDeviceConfigs = (newMyDeviceConfigs: React.SetStateAction<IMyDeviceConfig[]>) => {
-    Storage.set({ key: MYDEVICECONFIG_STORAGE, value: JSON.stringify(newMyDeviceConfigs) });
+    Preferences.set({ key: MYDEVICECONFIG_STORAGE, value: JSON.stringify(newMyDeviceConfigs) });
     return realSetMyDeviceConfigs(newMyDeviceConfigs)
   }
 
   useEffect(() => {
     const loadSaved = async () => {
-      const { value } = await Storage.get({ key: MYDEVICECONFIG_STORAGE });
+      const { value } = await Preferences.get({ key: MYDEVICECONFIG_STORAGE });
       const mydeviceconfigsInStorage = (value ? JSON.parse(value) : []) as IMyDeviceConfig[];
 
       setMyDeviceConfigs(mydeviceconfigsInStorage);
