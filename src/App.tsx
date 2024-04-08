@@ -1,5 +1,5 @@
 import { BleClient } from '@capacitor-community/bluetooth-le';
-import { 
+import {
   IonApp, 
   IonIcon, 
   IonLabel, 
@@ -7,6 +7,7 @@ import {
   IonTabs,
   IonTabBar,
   IonTabButton,
+  setupIonicReact,
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { flashlight, gitBranch, radio, settings } from "ionicons/icons"
@@ -94,3 +95,8 @@ const App: React.FC = () => {
 }
 
 export default App;
+
+// FIXME: https://ionicframework.com/docs/updating/6-0 says this is necessary?
+setupIonicReact({
+  mode: 'md'
+});
