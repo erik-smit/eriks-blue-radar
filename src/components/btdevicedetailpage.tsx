@@ -14,6 +14,7 @@ import {
  } from '@ionic/react';
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
+import { AxisOptions, Chart } from 'react-charts';
 
 import type { IMyConnectedDevice } from '../data/connecteddevices';
 import { ConnectedDevicesContext } from '../data/connecteddevices';
@@ -23,6 +24,42 @@ import type { IMyScanResult } from '../data/scanresults';
 import { ScanResultsContext } from '../data/scanresults';
 
 import './devicespage.css';
+
+type RSSI = {
+  date: Date,
+  rssi: number,
+}
+
+type Series = {
+  label: string,
+  data: RSSI[]
+}
+
+const origData: Series[] = [
+  // {
+  //   label: 'React Charts',
+  //   data: [
+  //     {
+  //       date: new Date(),
+  //       stars: 202123,
+  //     }
+  //     // ...
+  //   ]
+  // },
+  {
+    label: 'React Query',
+    data: [
+      {
+        date: new Date(new Date().getDate() + 1),
+        rssi: -50      },
+      {
+        date: new Date(new Date().getDate() + 2),
+        rssi: 20,
+      }
+      // ...
+    ]
+  }
+]
 
 const BTDeviceDetailPage: React.FC = () => {
   const params = useParams<{ deviceId: string }>();
@@ -45,6 +82,7 @@ interface IBTDeviceDetailPageContainerProps {
 }
 
 const BTDeviceDetailPageContainer: React.FC<IBTDeviceDetailPageContainerProps> = ({ deviceId }) => {
+
   const { myConnectedDevices } = useContext(ConnectedDevicesContext);
   const myConnectedDevice = myConnectedDevices.find((myconnecteddevice) => myconnecteddevice.device.deviceId === deviceId);
   
@@ -78,10 +116,36 @@ interface IRssiProps {
 }
 
 const Rssi: React.FC<IRssiProps> = ({ deviceId, myScanResult, myConnectedDevice }) => {
+  const primaryAxis = React.useMemo(
+    (): AxisOptions<RSSI> => ({
+      getValue: datum => datum.date,
+      elementType: 'line',
+    }),
+    []
+  )
+
+  const secondaryAxes = React.useMemo(
+    (): AxisOptions<RSSI>[] => [
+      {
+        getValue: datum => datum.rssi,
+        elementType: 'line',
+        scaleType: 'linear',
+      },
+    ],
+    []
+  )
+
   const [ rssi, setRssi ] = useState(0);
+  const [ data, setData ] = useState<Series[]>([]);
+
   useEffect(() => {
     if (myScanResult && myScanResult.scanresult.rssi) {
       setRssi(myScanResult.scanresult.rssi)
+      origData[0].data.push({ 
+        date: new Date(new Date().getDate() + 1),
+        rssi: myScanResult.scanresult.rssi
+      });
+      setData(() => (JSON.parse(JSON.stringify(origData))));
     } else if (myConnectedDevice) {
       const interval = setInterval(async () => {
         try {
@@ -90,6 +154,12 @@ const Rssi: React.FC<IRssiProps> = ({ deviceId, myScanResult, myConnectedDevice 
           );
           const rssiResult = result;
           setRssi(rssiResult);
+          origData[0].data.push({ 
+            date: new Date(),
+            rssi: rssiResult
+          });
+          setData(() => (JSON.parse(JSON.stringify(origData))));
+
           myConnectedDevice.lastseen = Date.now();
         } catch (err) {
           // if readRssi fails, try to connect()
@@ -106,7 +176,18 @@ const Rssi: React.FC<IRssiProps> = ({ deviceId, myScanResult, myConnectedDevice 
   }, [])
 
   return (
+    <IonList>
     <div className="rssi ion-text-center"> { rssi } </div>
+      <IonItem>
+          <Chart
+        options={{
+          data,
+          primaryAxis,
+          secondaryAxes,
+        }}
+      />
+      </IonItem>
+      </IonList>
   )
 }
 
@@ -179,7 +260,7 @@ const ComeGattSome: React.FC<IComeGattSomeProps> = ({ deviceId }) => {
     <IonItem>
       <IonButton
         onClick={ async () => await handleGattClick() }>
-        COME GATT SOME!
+        COME GATT SOME more!
         </IonButton>
       <IonTextarea>
       { gattStatus }
