@@ -11,7 +11,7 @@ git clone https://github.com/erik-smit/eriks-blue-radar
 cd eriks-blue-radar
 npm install --omit=optional
 
-set PATH=c:\temp\jdk-11.0.2\bin;%PATH%
+set PATH=c:\temp\jdk-17.0.2\bin;%PATH%
 set ANDROID_SDK_ROOT=c:\users\erik.smit\AppData\local\Android\Sdk
 set NODE_OPTIONS=--openssl-legacy-provider --no-experimental-fetch
 ionic build
