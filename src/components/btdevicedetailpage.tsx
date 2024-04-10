@@ -50,11 +50,8 @@ const origData: Series[] = [
     label: 'React Query',
     data: [
       {
-        date: new Date(new Date().getDate() + 1),
-        rssi: -50      },
-      {
-        date: new Date(new Date().getDate() + 2),
-        rssi: 20,
+        date: new Date(),
+        rssi: -60,
       }
       // ...
     ]
@@ -120,6 +117,7 @@ const Rssi: React.FC<IRssiProps> = ({ deviceId, myScanResult, myConnectedDevice 
     (): AxisOptions<RSSI> => ({
       getValue: datum => datum.date,
       elementType: 'line',
+      // scaleType: 'localTime',
     }),
     []
   )
@@ -136,13 +134,13 @@ const Rssi: React.FC<IRssiProps> = ({ deviceId, myScanResult, myConnectedDevice 
   )
 
   const [ rssi, setRssi ] = useState(0);
-  const [ data, setData ] = useState<Series[]>([]);
+  const [ data, setData ] = useState<Series[]>(origData);
 
   useEffect(() => {
     if (myScanResult && myScanResult.scanresult.rssi) {
       setRssi(myScanResult.scanresult.rssi)
       origData[0].data.push({ 
-        date: new Date(new Date().getDate() + 1),
+        date: new Date(),
         rssi: myScanResult.scanresult.rssi
       });
       setData(() => (JSON.parse(JSON.stringify(origData))));
@@ -154,6 +152,9 @@ const Rssi: React.FC<IRssiProps> = ({ deviceId, myScanResult, myConnectedDevice 
           );
           const rssiResult = result;
           setRssi(rssiResult);
+          if (origData[0].data.length > 20) {
+            origData[0].data.shift();
+          }
           origData[0].data.push({ 
             date: new Date(),
             rssi: rssiResult
@@ -177,17 +178,22 @@ const Rssi: React.FC<IRssiProps> = ({ deviceId, myScanResult, myConnectedDevice 
 
   return (
     <IonList>
-    <div className="rssi ion-text-center"> { rssi } </div>
-      <IonItem>
+      <div className="rssi ion-text-center"> { rssi } </div>
+      <div
+      style={{
+        height: '300px',
+      }}
+    >
           <Chart
-        options={{
-          data,
-          primaryAxis,
-          secondaryAxes,
-        }}
-      />
-      </IonItem>
-      </IonList>
+
+            options={{
+              data,
+              primaryAxis,
+              secondaryAxes,
+            }}
+        />
+      </div>
+    </IonList>
   )
 }
 
