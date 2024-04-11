@@ -14,7 +14,7 @@ import {
  } from '@ionic/react';
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { AxisOptions, Chart } from 'react-charts';
+import { LineChart, Line, XAxis, Label, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Scatter, LabelList } from 'recharts';
 
 import type { IMyConnectedDevice } from '../data/connecteddevices';
 import { ConnectedDevicesContext } from '../data/connecteddevices';
@@ -24,39 +24,6 @@ import type { IMyScanResult } from '../data/scanresults';
 import { ScanResultsContext } from '../data/scanresults';
 
 import './devicespage.css';
-
-type RSSI = {
-  date: Date,
-  rssi: number,
-}
-
-type Series = {
-  label: string,
-  data: RSSI[]
-}
-
-const origData: Series[] = [
-  // {
-  //   label: 'React Charts',
-  //   data: [
-  //     {
-  //       date: new Date(),
-  //       stars: 202123,
-  //     }
-  //     // ...
-  //   ]
-  // },
-  {
-    label: 'React Query',
-    data: [
-      {
-        date: new Date(),
-        rssi: -60,
-      }
-      // ...
-    ]
-  }
-]
 
 const BTDeviceDetailPage: React.FC = () => {
   const params = useParams<{ deviceId: string }>();
@@ -112,38 +79,21 @@ interface IRssiProps {
   myScanResult?: IMyScanResult;
 }
 
+const origData: {date: Date, rssi: number | null }[] = [
+];
+
 const Rssi: React.FC<IRssiProps> = ({ deviceId, myScanResult, myConnectedDevice }) => {
-  const primaryAxis = React.useMemo(
-    (): AxisOptions<RSSI> => ({
-      getValue: datum => datum.date,
-      elementType: 'line',
-      // scaleType: 'localTime',
-    }),
-    []
-  )
-
-  const secondaryAxes = React.useMemo(
-    (): AxisOptions<RSSI>[] => [
-      {
-        getValue: datum => datum.rssi,
-        elementType: 'line',
-        scaleType: 'linear',
-      },
-    ],
-    []
-  )
-
   const [ rssi, setRssi ] = useState(0);
-  const [ data, setData ] = useState<Series[]>(origData);
+  const [ data, setData ] = useState(origData);
 
   useEffect(() => {
     if (myScanResult && myScanResult.scanresult.rssi) {
       setRssi(myScanResult.scanresult.rssi)
-      origData[0].data.push({ 
+      origData.push({ 
         date: new Date(),
         rssi: myScanResult.scanresult.rssi
       });
-      setData(() => (JSON.parse(JSON.stringify(origData))));
+      setData(() => (JSON.parse(JSON.stringify(data))));
     } else if (myConnectedDevice) {
       const interval = setInterval(async () => {
         try {
@@ -152,13 +102,16 @@ const Rssi: React.FC<IRssiProps> = ({ deviceId, myScanResult, myConnectedDevice 
           );
           const rssiResult = result;
           setRssi(rssiResult);
-          if (origData[0].data.length > 20) {
-            origData[0].data.shift();
+          while (origData.length < 20) {
+            origData.push({ date: new Date(), rssi: null });
           }
-          origData[0].data.push({ 
+          origData.push({ 
             date: new Date(),
             rssi: rssiResult
           });
+          if (origData.length > 20) {
+            origData.shift();
+          }
           setData(() => (JSON.parse(JSON.stringify(origData))));
 
           myConnectedDevice.lastseen = Date.now();
@@ -178,21 +131,19 @@ const Rssi: React.FC<IRssiProps> = ({ deviceId, myScanResult, myConnectedDevice 
 
   return (
     <IonList>
-      <div className="rssi ion-text-center"> { rssi } </div>
-      <div
-      style={{
-        height: '300px',
-      }}
-    >
-          <Chart
+      <ResponsiveContainer width="100%" height={300}>
+        <LineChart data={data}>
+          <CartesianGrid vertical={false} />
+          <Line type="monotone" dataKey="rssi" stroke="#8884d8" isAnimationActive={false} />
+          <XAxis />
+          <YAxis />
+          <defs>
+            <text id="chartLabel" x="50%" y="50%" textAnchor="middle" dominantBaseline="middle" fontSize="80">{rssi}</text>
+          </defs>
+          <use xlinkHref="#chartLabel" />
+        </LineChart>
+      </ResponsiveContainer>
 
-            options={{
-              data,
-              primaryAxis,
-              secondaryAxes,
-            }}
-        />
-      </div>
     </IonList>
   )
 }
