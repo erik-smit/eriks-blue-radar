@@ -88,19 +88,31 @@ const Rssi: React.FC<IRssiProps> = ({ deviceId, myScanResult, myConnectedDevice 
 
   useEffect(() => {
     if (myScanResult && myScanResult.scanresult.rssi) {
+
       setRssi(myScanResult.scanresult.rssi)
       origData.push({ 
         date: new Date(),
         rssi: myScanResult.scanresult.rssi
       });
-      setData(() => (JSON.parse(JSON.stringify(data))));
+      while (origData.length < 20) {
+        origData.push({ date: new Date(), rssi: null });
+      }
+      origData.push({ 
+        date: new Date(),
+        rssi: myScanResult.scanresult.rssi
+      });
+      while (origData.length > 20) {
+        origData.shift();
+      }
+      setData(() => (JSON.parse(JSON.stringify(origData))));
+
     } else if (myConnectedDevice) {
       const interval = setInterval(async () => {
         try {
-          const result = await BleClient.readRssi(
+          const rssiResult = await BleClient.readRssi(
             deviceId,
           );
-          const rssiResult = result;
+
           setRssi(rssiResult);
           while (origData.length < 20) {
             origData.push({ date: new Date(), rssi: null });
@@ -109,7 +121,7 @@ const Rssi: React.FC<IRssiProps> = ({ deviceId, myScanResult, myConnectedDevice 
             date: new Date(),
             rssi: rssiResult
           });
-          if (origData.length > 20) {
+          while (origData.length > 20) {
             origData.shift();
           }
           setData(() => (JSON.parse(JSON.stringify(origData))));
@@ -127,7 +139,7 @@ const Rssi: React.FC<IRssiProps> = ({ deviceId, myScanResult, myConnectedDevice 
         clearInterval(interval)
       }
     }
-  }, [])
+  }, [myScanResult])
 
   return (
     <IonList>
