@@ -87,7 +87,7 @@ const Rssi: React.FC<IRssiProps> = ({ deviceId, myScanResult, myConnectedDevice 
   const [ data, setData ] = useState(origData);
 
   useEffect(() => {
-    if (myScanResult && myScanResult.scanresult.rssi) {
+    if (myScanResult?.scanresult.rssi) {
 
       setRssi(myScanResult.scanresult.rssi)
       origData.push({ 
