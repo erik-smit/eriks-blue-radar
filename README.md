@@ -3,9 +3,7 @@
 # Development
 
 ```
-# pin older ionic to fix: "Error: Non-zero exit from subprocess." 
-# https://stackoverflow.com/questions/75023697/error-non-zero-exit-from-subprocess-ionic
-npm i -g @ionic/cli@6.20.1 
+npm i -g @ionic/cli
 
 git clone https://github.com/erik-smit/eriks-blue-radar
 cd eriks-blue-radar
@@ -13,7 +11,6 @@ npm install --omit=optional
 
 set PATH=c:\temp\jdk-17.0.2\bin;%PATH%
 set ANDROID_SDK_ROOT=c:\users\erik.smit\AppData\local\Android\Sdk
-set NODE_OPTIONS=--openssl-legacy-provider --no-experimental-fetch
 ionic build
 ionic cap sync
 ionic cap run android --livereload --external --public-host=192.168.18.237
