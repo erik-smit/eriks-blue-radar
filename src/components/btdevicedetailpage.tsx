@@ -10,7 +10,8 @@ import {
   IonPage,
   IonTextarea,
   IonTitle,
-  IonToolbar
+  IonToolbar,
+  useIonViewWillEnter
  } from '@ionic/react';
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
@@ -85,6 +86,12 @@ const origData: {date: Date, rssi: number | null }[] = [
 const Rssi: React.FC<IRssiProps> = ({ deviceId, myScanResult, myConnectedDevice }) => {
   const [ rssi, setRssi ] = useState(0);
   const [ data, setData ] = useState(origData);
+  const [labelColor, setLabelColor] = useState('black');
+
+  useIonViewWillEnter(() => {
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    setLabelColor(prefersDark ? 'white' : 'black');
+  });
 
   useEffect(() => {
     if (myScanResult?.scanresult.rssi) {
@@ -146,11 +153,11 @@ const Rssi: React.FC<IRssiProps> = ({ deviceId, myScanResult, myConnectedDevice 
       <ResponsiveContainer width="100%" height={300}>
         <LineChart data={data}>
           <CartesianGrid vertical={false} />
-          <Line type="monotone" dataKey="rssi" stroke="#8884d8" isAnimationActive={false} />
+          <Line type="monotone" dataKey="rssi" isAnimationActive={false} />
           <XAxis />
           <YAxis />
           <defs>
-            <text id="chartLabel" x="50%" y="50%" textAnchor="middle" dominantBaseline="middle" fontSize="80">{rssi}</text>
+            <text id="chartLabel" x="50%" y="50%" textAnchor="middle" dominantBaseline="middle" fontSize="80" fill={labelColor}>{rssi}</text>
           </defs>
           <use xlinkHref="#chartLabel" />
         </LineChart>
