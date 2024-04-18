@@ -75,6 +75,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@capacitor/cli": "^5.0.0",
     "@ionic/eslint-config": "^0.3.0",
     "eslint": "^7.29.0",
