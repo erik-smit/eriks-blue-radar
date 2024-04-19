@@ -55,7 +55,7 @@
     "lint": "npm run eslint",
     "fmt": "npm run eslint -- --fix",
     "eslint": "eslint . --ext .ts --ext .tsx",
-    "postinstall": "patch-package"
+    "postinstall": "npx patch-package"
   },
   "eslintConfig": {
     "extends": "@ionic/eslint-config/recommended",
