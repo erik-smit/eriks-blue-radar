@@ -9,6 +9,5 @@ public class MainActivity extends BridgeActivity {
     public void onCreate(Bundle savedInstanceState) {
         registerPlugin(BluetoothManager_getConnectedDevices.class);
         super.onCreate(savedInstanceState);
-
     }
 }

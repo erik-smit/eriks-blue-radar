@@ -17,16 +17,16 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
 
-import type { IMyConnectedDevice } from '../data/connecteddevices';
-import { ConnectedDevicesContext } from '../data/connecteddevices';
-import type { IMyDeviceConfig } from '../data/mydeviceconfig';
-import { MyDeviceConfigContext } from '../data/mydeviceconfig';
-import type { IMyScanResult } from '../data/scanresults';
-import { ScanResultsContext } from '../data/scanresults';
+import type { IMyConnectedDevice } from '../data/ConnectedDevices';
+import { ConnectedDevicesContext } from '../data/ConnectedDevices';
+import type { IMyDeviceConfig } from '../data/MyDeviceConfig';
+import { MyDeviceConfigContext } from '../data/MyDeviceConfig';
+import type { IMyScanResult } from '../data/ScanResults';
+import { ScanResultsContext } from '../data/ScanResults';
 
-import './devicespage.css';
+import './DevicesPage.css';
 
-const BTDeviceDetailPage: React.FC = () => {
+const DeviceDetailPage: React.FC = () => {
   const params = useParams<{ deviceId: string }>();
   const deviceId = params.deviceId;
 
@@ -37,16 +37,16 @@ const BTDeviceDetailPage: React.FC = () => {
           <IonTitle>Search BLE Device</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <BTDeviceDetailPageContainer key={deviceId} deviceId={deviceId} />
+      <DeviceDetailPageContainer key={deviceId} deviceId={deviceId} />
     </IonPage>
   );
 };
 
-interface IBTDeviceDetailPageContainerProps {
+interface IDeviceDetailPageContainerProps {
   deviceId: string;
 }
 
-const BTDeviceDetailPageContainer: React.FC<IBTDeviceDetailPageContainerProps> = ({ deviceId }) => {
+const DeviceDetailPageContainer: React.FC<IDeviceDetailPageContainerProps> = ({ deviceId }) => {
 
   const { myConnectedDevices } = useContext(ConnectedDevicesContext);
   const myConnectedDevice = myConnectedDevices.find((myconnecteddevice) => myconnecteddevice.device.deviceId === deviceId);
@@ -324,4 +324,4 @@ const NameField: React.FC<INameFieldProps> = ({ deviceId, myConnectedDevice, myD
   )
 }
 
-export { BTDeviceDetailPage }
+export { DeviceDetailPage }

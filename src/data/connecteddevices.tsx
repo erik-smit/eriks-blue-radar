@@ -29,7 +29,12 @@ const ConnectedDeviceGetDevices = async (setMyConnectedDevices: React.Dispatch<R
   setMyConnectedDevices(newMyConnectedDevices)
 }
 
-const ConnectedDeviceContextProvider: React.FC = ({children}) => {
+//FIXME: replace with https://stackoverflow.com/a/71809927/8338773 ?
+type Props = {
+  children?: React.ReactNode
+};
+
+const ConnectedDeviceContextProvider: React.FC<Props> = ({children}) => {
   const [ myConnectedDevices, setMyConnectedDevices ] = useState(initialConnectedDeviceState)
 
   return (

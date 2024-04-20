@@ -9,9 +9,9 @@ import {
  } from '@ionic/react';
 import React, { useContext, useEffect } from 'react';
 
-import { ConnectedDevicesContext, ConnectedDeviceGetDevices } from '../data/connecteddevices'
-import { MyDeviceConfigContext } from '../data/mydeviceconfig';
-import './devicespage.css';
+import { ConnectedDevicesContext, ConnectedDeviceGetDevices } from '../data/ConnectedDevices';
+import { MyDeviceConfigContext } from '../data/MyDeviceConfig';
+import './DevicesPage.css';
 
 const ConnectedDevicesPage: React.FC = () => {
   const { myConnectedDevices, setMyConnectedDevices } = useContext(ConnectedDevicesContext);

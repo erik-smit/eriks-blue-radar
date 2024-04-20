@@ -12,10 +12,10 @@ import {
  } from '@ionic/react';
 import React, { useContext } from 'react';
 
-import { MyDeviceConfigContext } from '../data/mydeviceconfig';
-import { ScanResultsContext, ScanResultScanningStart, ScanResultScanningStop } from '../data/scanresults'
+import { MyDeviceConfigContext } from '../data/MyDeviceConfig';
+import { ScanResultsContext, ScanResultScanningStart, ScanResultScanningStop } from '../data/ScanResults'
 import WifiIcon from "../icons/ionic-icon-wifi-outline-eriks-blue-radar";
-import './devicespage.css';
+import './ScannedDevices.css';
 
 const ScannedDevicesPage: React.FC = () => {
   const { myScanResults, setMyScanResults } = useContext(ScanResultsContext);

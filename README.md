@@ -7,7 +7,7 @@ npm i -g @ionic/cli
 
 git clone https://github.com/erik-smit/eriks-blue-radar
 cd eriks-blue-radar
-npm install --omit=optional
+npm ci
 
 set PATH=c:\temp\jdk-17.0.2\bin;%PATH%
 set ANDROID_SDK_ROOT=c:\users\erik.smit\AppData\local\Android\Sdk

@@ -1,5 +1,5 @@
 {
 	"appId": "io.ionic.starter",
-	"appName": "eriks-blue-radar",
-	"webDir": "build"
+	"appName": "eriks-blue-radar-3",
+	"webDir": "dist"
 }

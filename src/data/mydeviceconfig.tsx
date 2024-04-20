@@ -18,7 +18,12 @@ const MyDeviceConfigContext = createContext<{
 
 const MYDEVICECONFIG_STORAGE = "mydeviceconfig";
 
-const MyDeviceConfigContextProvider: React.FC = ({children}) => {
+//FIXME: replace with https://stackoverflow.com/a/71809927/8338773 ?
+type Props = {
+    children?: React.ReactNode
+  };
+
+const MyDeviceConfigContextProvider: React.FC<Props> = ({children}) => {
   const [ myDeviceConfigs, realSetMyDeviceConfigs ] = useState(initialMyDeviceConfigState)
 
   const setMyDeviceConfigs = (newMyDeviceConfigs: React.SetStateAction<IMyDeviceConfig[]>) => {

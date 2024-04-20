@@ -1,26 +1,26 @@
 import { BleClient } from '@capacitor-community/bluetooth-le';
+import { Redirect, Route } from 'react-router-dom';
 import {
-  IonApp, 
-  IonIcon, 
-  IonLabel, 
+  IonApp,
+  IonIcon,
+  IonLabel,
   IonRouterOutlet,
-  IonTabs,
   IonTabBar,
   IonTabButton,
-  setupIonicReact,
+  IonTabs,
+  setupIonicReact
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { flashlight, gitBranch, radio, settings } from "ionicons/icons"
-import React, { useEffect } from 'react';
-import { Redirect, Route } from 'react-router-dom';
+import { useEffect } from 'react';
+import { flashlight, gitBranch, settings, radio } from 'ionicons/icons';
+import { AboutPage } from './pages/About';
+import { ConnectedDevicesPage } from './pages/ConnectedDevices';
+import { DeviceDetailPage } from './pages/DeviceDetail';
+import { ScannedDevicesPage } from './pages/ScannedDevices';
 
-import { AboutPage } from './components/aboutpage';
-import { BTDeviceDetailPage } from './components/btdevicedetailpage';
-import { ConnectedDevicesPage } from './components/connecteddevicespage';
-import { ScannedDevicesPage } from './components/scanneddevicespage';
-import { ConnectedDeviceContextProvider } from './data/connecteddevices'
-import { MyDeviceConfigContextProvider } from './data/mydeviceconfig';
-import { ScanResultContextProvider } from './data/scanresults';
+import { ConnectedDeviceContextProvider } from './data/ConnectedDevices'
+import { MyDeviceConfigContextProvider } from './data/MyDeviceConfig';
+import { ScanResultContextProvider } from './data/ScanResults';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -38,8 +38,21 @@ import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
 
+/**
+ * Ionic Dark Mode
+ * -----------------------------------------------------
+ * For more info, please see:
+ * https://ionicframework.com/docs/theming/dark-mode
+ */
+
+/* import '@ionic/react/css/palettes/dark.always.css'; */
+/* import '@ionic/react/css/palettes/dark.class.css'; */
+import '@ionic/react/css/palettes/dark.system.css';
+
 /* Theme variables */
 import './theme/variables.css';
+
+setupIonicReact();
 
 const App: React.FC = () => {
   useEffect(() => {
@@ -48,55 +61,46 @@ const App: React.FC = () => {
     })();
     return;
   }, []);
-  
+
   return (
-  <ConnectedDeviceContextProvider>
     <MyDeviceConfigContextProvider>
-      <ScanResultContextProvider>
-        <IonApp>
-          <IonReactRouter>
-            <IonTabs>
-              <IonTabBar slot="bottom">
-                <IonTabButton tab="connecteddevices" href="/connecteddevices">
-                  <IonIcon icon={gitBranch} />
-                  <IonLabel>Connected Devices</IonLabel>
-                </IonTabButton>
-
-                <IonTabButton tab="scanneddevices" href="/scanneddevices">
-                  <IonIcon icon={radio} />
-                  <IonLabel>Scan Devices</IonLabel>
-                </IonTabButton>
-
-                <IonTabButton tab="search" href="/btdevicedetail/">
-                  <IonIcon icon={flashlight} />
-                  <IonLabel>Device Radar</IonLabel>
-                </IonTabButton>
-
-                <IonTabButton tab="about" href="/about">
-                  <IonIcon icon={settings} />
-                  <IonLabel>About</IonLabel>
-                </IonTabButton>
-              </IonTabBar>
-
-              <IonRouterOutlet>
-                <Route path="/scanneddevices" component={ScannedDevicesPage} />
-                <Route path="/btdevicedetail/:deviceId" component={BTDeviceDetailPage} />
-                <Route path="/connecteddevices" component={ConnectedDevicesPage} />
-                <Route path="/about" component={AboutPage} />
-                <Route exact path="/" render={() => <Redirect to="/connecteddevices" />} />
-              </IonRouterOutlet>
-            </IonTabs>
-          </IonReactRouter>
-        </IonApp>
-      </ScanResultContextProvider>
+      <ConnectedDeviceContextProvider>
+        <ScanResultContextProvider>
+          <IonApp>
+            <IonReactRouter>
+              <IonTabs>
+                <IonRouterOutlet>
+                  <Route path="/scanneddevices" component={ScannedDevicesPage} />
+                  <Route path="/btdevicedetail/:deviceId" component={DeviceDetailPage} />
+                  <Route path="/connecteddevices" component={ConnectedDevicesPage} />
+                  <Route path="/about" component={AboutPage} />
+                  <Route exact path="/" render={() => <Redirect to="/connecteddevices" />} />
+                </IonRouterOutlet>
+                <IonTabBar slot="bottom">
+                  <IonTabButton tab="connecteddevices" href="/connecteddevices">
+                    <IonIcon icon={gitBranch} />
+                    <IonLabel>Connected Devices</IonLabel>
+                  </IonTabButton>
+                  <IonTabButton tab="scanneddevices" href="/scanneddevices">
+                    <IonIcon icon={radio} />
+                    <IonLabel>Scan Devices</IonLabel>
+                  </IonTabButton>
+                  <IonTabButton tab="search" href="/btdevicedetail/">
+                    <IonIcon icon={flashlight} />
+                    <IonLabel>Device Radar</IonLabel>
+                  </IonTabButton>
+                  <IonTabButton tab="about" href="/about">
+                    <IonIcon icon={settings} />
+                    <IonLabel>About</IonLabel>
+                  </IonTabButton>
+                </IonTabBar>
+              </IonTabs>
+            </IonReactRouter>
+          </IonApp>
+        </ScanResultContextProvider>
+      </ConnectedDeviceContextProvider>
     </MyDeviceConfigContextProvider>
-    </ConnectedDeviceContextProvider>
-  );
-}
+  )
+};
 
 export default App;
-
-// FIXME: https://ionicframework.com/docs/updating/6-0 says this is necessary?
-setupIonicReact({
-  mode: 'md'
-});

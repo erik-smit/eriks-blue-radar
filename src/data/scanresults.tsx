@@ -48,7 +48,13 @@ const ScanResultScanningStart = async (setMyScanResults: React.Dispatch<React.Se
 const ScanResultScanningStop = async (): Promise<void> => {
   await BleClient.stopLEScan();
 }
-const ScanResultContextProvider: React.FC = ({children}) => {
+
+//FIXME: replace with https://stackoverflow.com/a/71809927/8338773 ?
+type Props = {
+    children?: React.ReactNode
+  };
+
+const ScanResultContextProvider: React.FC<Props> = ({children}) => {
   const [ myScanResults, setMyScanResults ] = useState(initialScanResultState)
 
   return (
