@@ -1,0 +1,21 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Connected Devices
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid *ngFor="let device of connecteddevicesService.connectedDevices; index as position">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>{{ device.name }}</ion-card-title>
+        <ion-card-subtitle>{{ device.id }}</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-button (click)="inspectDevice(device.id)">Inspect</ion-button>
+      </ion-card-content>
+    </ion-card>
+  </ion-grid>
+</ion-content>

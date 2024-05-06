@@ -1,7 +1,7 @@
 {
-  "name": "eriks-blue-radar",
+  "name": "eriks-blue-radar-angular-ng",
   "integrations": {
     "capacitor": {}
   },
-  "type": "react-vite"
+  "type": "angular"
 }
