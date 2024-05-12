@@ -7,7 +7,6 @@ import { EChartsOption, ECharts } from 'echarts';
 
 import { ScanneddevicesService } from '../services/scanneddevices.service';
 import { ScanResult } from '@capacitor-community/bluetooth-le';
-import { scan } from 'rxjs';
 
 export interface inspecteddevice {
   name: string;
@@ -23,9 +22,11 @@ export interface inspecteddevice {
 export class Tab3Page {
   // FIXME: maybe use undefined instead of empty array
   public inspectedDevices: inspecteddevice[] = [];
+  public pollerInterval: ReturnType<typeof setInterval> | undefined;
 
   constructor(private route: ActivatedRoute, public scannedDevicesService: ScanneddevicesService) {
     this.route.params.subscribe(params => {
+      this.clearInspectedDevices();
       if (params['connected']) {
         this.inspectConnectedDevice(params['connected']);
       }
@@ -35,6 +36,14 @@ export class Tab3Page {
     });
   }
 
+  private clearInspectedDevices() {
+    this.inspectedDevices = [];
+    if (this.pollerInterval) {
+      clearInterval(this.pollerInterval);
+    }
+    this.data = [];
+  }
+
   private inspectConnectedDevice(deviceId: string) {
     this.inspectedDevices.push({
       name: deviceId,
@@ -42,7 +51,7 @@ export class Tab3Page {
       rssi: -60
     });
     // poll Rssi once a second
-    setInterval(() => {
+    this.pollerInterval = setInterval(() => {
       BleClient.readRssi(deviceId)
         .then((rssi) => {
           this.inspectedDevices[0] = {
@@ -68,6 +77,9 @@ export class Tab3Page {
     });
 
     console.log("inspecting device " + deviceId);
+
+    let pollData: number | undefined;
+
     let callback = (scanresult: ScanResult) => {
       if (scanresult.device.deviceId !== deviceId) {
         return;
@@ -77,10 +89,20 @@ export class Tab3Page {
           ...this.inspectedDevices[0],
           rssi: scanresult.rssi
         }
-        this.addRssiDatum(scanresult.rssi);
+        if (pollData !== scanresult.rssi) {
+          pollData = scanresult.rssi;
+        }
         console.log("found device " + deviceId + " with rssi " + scanresult.rssi);
       }
     }
+
+    this.pollerInterval = setInterval(() => {
+      // if (pollData !== undefined) {
+      this.addRssiDatum(pollData);
+      // }
+      pollData = undefined;
+    }, 1000);
+
     this.scannedDevicesService.startScan(callback);
   }
 
@@ -109,7 +131,7 @@ export class Tab3Page {
     ],
     yAxis: [{
       type: 'value',
-      max: (value) => value.min + 20,
+      max: (value) => value.max + 20,
       min: (value) => value.min - 20,
     }],
     series: [
@@ -122,7 +144,7 @@ export class Tab3Page {
   mergeOption: any;
   data: any[] = [];
 
-  addRssiDatum(rssi: number) {
+  addRssiDatum(rssi: number | undefined) {
     this.data.push([new Date(), rssi])
     while (this.data.length > 20) {
       this.data.shift();

@@ -21,19 +21,4 @@
       </ion-card-content>
     </ion-card>
   </ion-grid>
-  <ion-grid *ngIf="scannedDevicesService.detailDevice">
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>{{ scannedDevicesService.detailDevice.name }}</ion-card-title>
-        <ion-card-subtitle>{{ scannedDevicesService.detailDevice.id }}</ion-card-subtitle>
-        <div style="position: absolute; right: 10%; top: 50%; transform: translateY(-50%);">
-          {{ scannedDevicesService.detailDevice.rssi }}
-        </div>
-      </ion-card-header>
-      <ion-card-content>
-        <div echarts [options]="chartOption" [merge]="mergeOption" class="demo-chart"></div>
-      </ion-card-content>
-    </ion-card>
-  </ion-grid>
-
 </ion-content>
