@@ -3,16 +3,16 @@ import { Router } from '@angular/router';
 import { ScanneddevicesService } from '../services/scanneddevices.service';
 
 @Component({
-  selector: 'app-tab2',
-  templateUrl: 'tab2.page.html',
-  styleUrls: ['tab2.page.scss']
+  selector: 'app-scanneddevices',
+  templateUrl: 'scanneddevices.page.html',
+  styleUrls: ['scanneddevices.page.scss']
 })
-export class Tab2Page {
+export class ScannedDevicesPage {
 
   constructor(public scannedDevicesService: ScanneddevicesService, private router: Router) {}
 
   inspectDevice(id: string) {
-    this.router.navigate(['/tabs/tab3/scanned', id]);
+    this.router.navigate(['/tabs/detaildevice/scanned', id]);
   }
   toggleScanning() {
     this.scannedDevicesService.toggleScan();

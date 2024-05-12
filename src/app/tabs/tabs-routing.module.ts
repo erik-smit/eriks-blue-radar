@@ -8,27 +8,27 @@ const routes: Routes = [
     component: TabsPage,
     children: [
       {
-        path: 'tab1',
-        loadChildren: () => import('../tab1/tab1.module').then(m => m.Tab1PageModule)
+        path: 'connecteddevices',
+        loadChildren: () => import('../connecteddevices/connecteddevices.module').then(m => m.ConnectedDevicesPageModule)
       },
       {
-        path: 'tab2',
-        loadChildren: () => import('../tab2/tab2.module').then(m => m.Tab2PageModule)
+        path: 'scanneddevices',
+        loadChildren: () => import('../scanneddevices/scanneddevices.module').then(m => m.ScannedDevicesPageModule)
       },
       {
-        path: 'tab3',
-        loadChildren: () => import('../tab3/tab3.module').then(m => m.Tab3PageModule)
+        path: 'detaildevice',
+        loadChildren: () => import('../detaildevice/detaildevice.module').then(m => m.DetailDevicePageModule)
       },
       {
         path: '',
-        redirectTo: '/tabs/tab1',
+        redirectTo: '/tabs/connecteddevices',
         pathMatch: 'full'
       }
     ]
   },
   {
     path: '',
-    redirectTo: '/tabs/tab1',
+    redirectTo: '/tabs/connecteddevices',
     pathMatch: 'full'
   }
 ];

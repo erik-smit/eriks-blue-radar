@@ -2,10 +2,10 @@ import { IonicModule } from '@ionic/angular';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Tab3Page } from './tab3.page';
+import { DetailDevicePage } from './detaildevice.page';
 import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
 
-import { Tab3PageRoutingModule } from './tab3-routing.module';
+import { DetailDevicePageRoutingModule } from './detaildevice-routing.module';
 
 import { NgxEchartsModule } from 'ngx-echarts';
 
@@ -16,7 +16,7 @@ import { NgxEchartsModule } from 'ngx-echarts';
     CommonModule,
     FormsModule,
     ExploreContainerComponentModule,
-    Tab3PageRoutingModule,
+    DetailDevicePageRoutingModule,
     NgxEchartsModule.forRoot({
       /**
        * This will import all modules from echarts.
@@ -26,6 +26,6 @@ import { NgxEchartsModule } from 'ngx-echarts';
       echarts: () => import('echarts'),
     }),
   ],
-  declarations: [Tab3Page]
+  declarations: [DetailDevicePage]
 })
-export class Tab3PageModule {}
+export class DetailDevicePageModule {}

@@ -15,11 +15,11 @@ export interface inspecteddevice {
 }
 
 @Component({
-  selector: 'app-tab3',
-  templateUrl: 'tab3.page.html',
-  styleUrls: ['tab3.page.scss']
+  selector: 'app-detaildevice',
+  templateUrl: 'detaildevice.page.html',
+  styleUrls: ['detaildevice.page.scss']
 })
-export class Tab3Page {
+export class DetailDevicePage {
   // FIXME: maybe use undefined instead of empty array
   public inspectedDevices: inspecteddevice[] = [];
   public pollerInterval: ReturnType<typeof setInterval> | undefined;
