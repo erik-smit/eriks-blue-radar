@@ -36,7 +36,16 @@ export class DetailDevicePage {
     });
   }
 
-  private clearInspectedDevices() {
+  // ensure scanning stops when browsing away from the page
+  ngOnDestroy() {
+    if (this.pollerInterval) {
+      clearInterval(this.pollerInterval);
+    }
+    this.scannedDevicesService.stopScan();
+  }
+  
+  
+  public clearInspectedDevices() {
     this.inspectedDevices = [];
     if (this.pollerInterval) {
       clearInterval(this.pollerInterval);
@@ -44,7 +53,7 @@ export class DetailDevicePage {
     this.data = [];
   }
 
-  private inspectConnectedDevice(deviceId: string) {
+  public inspectConnectedDevice(deviceId: string) {
     this.inspectedDevices.push({
       name: deviceId,
       id: deviceId,
@@ -69,7 +78,7 @@ export class DetailDevicePage {
     }, 1000);
   }
 
-  private inspectScannedDevice(deviceId: string) {
+  public inspectScannedDevice(deviceId: string) {
     this.inspectedDevices.push({
       name: deviceId,
       id: deviceId,
