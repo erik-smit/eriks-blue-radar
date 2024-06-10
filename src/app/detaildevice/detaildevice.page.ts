@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ModalController, NavParams } from '@ionic/angular';
 
 import { BleClient } from '@capacitor-community/bluetooth-le';
 
@@ -24,16 +24,23 @@ export class DetailDevicePage {
   public inspectedDevices: inspecteddevice[] = [];
   public pollerInterval: ReturnType<typeof setInterval> | undefined;
 
-  constructor(private route: ActivatedRoute, public scannedDevicesService: ScanneddevicesService) {
-    this.route.params.subscribe(params => {
-      this.clearInspectedDevices();
-      if (params['connected']) {
-        this.inspectConnectedDevice(params['connected']);
-      }
-      if (params['scanned']) {
-        this.inspectScannedDevice(params['scanned']);
-      }
-    });
+  connected!: string;
+  scanned!: string;
+
+  constructor(private modalCtrl: ModalController, private navParams: NavParams, public scannedDevicesService: ScanneddevicesService) {
+    this.connected = this.navParams.get('connected');
+    this.scanned = this.navParams.get('scanned');
+    // this.clearInspectedDevices();
+    if (this.connected) {
+      this.inspectConnectedDevice(this.connected);
+    }
+    if (this.scanned) {
+      this.inspectScannedDevice(this.scanned);
+    }
+  }
+
+  confirm() {
+    return this.modalCtrl.dismiss(null, 'confirm');
   }
 
   // ensure scanning stops when browsing away from the page

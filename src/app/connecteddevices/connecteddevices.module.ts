@@ -6,6 +6,7 @@ import { ConnectedDevicesPage } from './connecteddevices.page';
 import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
 
 import { ConnectedDevicesPageRoutingModule } from './connecteddevices-routing.module';
+import { NgxEchartsModule } from 'ngx-echarts';
 
 @NgModule({
   imports: [
@@ -13,8 +14,16 @@ import { ConnectedDevicesPageRoutingModule } from './connecteddevices-routing.mo
     CommonModule,
     FormsModule,
     ExploreContainerComponentModule,
-    ConnectedDevicesPageRoutingModule
+    ConnectedDevicesPageRoutingModule,
+    NgxEchartsModule.forRoot({
+      /**
+       * This will import all modules from echarts.
+       * If you only need custom modules,
+       * please refer to [Custom Build] section.
+       */
+      echarts: () => import('echarts'),
+    }),
   ],
-  declarations: [ConnectedDevicesPage]
+  declarations: [ConnectedDevicesPage],
 })
 export class ConnectedDevicesPageModule {}

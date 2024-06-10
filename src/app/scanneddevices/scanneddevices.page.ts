@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { ModalController } from '@ionic/angular';
 import { ScanneddevicesService } from '../services/scanneddevices.service';
+import { DetailDevicePage } from '../detaildevice/detaildevice.page';
 
 @Component({
   selector: 'app-scanneddevices',
@@ -9,12 +10,22 @@ import { ScanneddevicesService } from '../services/scanneddevices.service';
 })
 export class ScannedDevicesPage {
 
-  constructor(public scannedDevicesService: ScanneddevicesService, private router: Router) {}
+  constructor(public scannedDevicesService: ScanneddevicesService, private modalCtrl: ModalController) {}
 
-  inspectDevice(id: string) {
-    this.router.navigate(['/tabs/detaildevice/scanned', id]);
-  }
   toggleScanning() {
     this.scannedDevicesService.toggleScan();
   }
+
+  async inspectDevice(id: string) {
+    const modal = await this.modalCtrl.create({
+      component: DetailDevicePage,
+      componentProps: {
+        'scanned': id
+      }
+    });
+    modal.present();
+
+    const { data, role } = await modal.onWillDismiss();
+  }
+
 }

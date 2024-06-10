@@ -6,6 +6,7 @@ import { ScannedDevicesPage } from './scanneddevices.page';
 import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
 
 import { ScannedDevicesPageRoutingModule } from './scanneddevices-routing.module';
+import { NgxEchartsModule } from 'ngx-echarts';
 
 @NgModule({
   imports: [
@@ -13,7 +14,15 @@ import { ScannedDevicesPageRoutingModule } from './scanneddevices-routing.module
     CommonModule,
     FormsModule,
     ExploreContainerComponentModule,
-    ScannedDevicesPageRoutingModule
+    ScannedDevicesPageRoutingModule,
+    NgxEchartsModule.forRoot({
+      /**
+       * This will import all modules from echarts.
+       * If you only need custom modules,
+       * please refer to [Custom Build] section.
+       */
+      echarts: () => import('echarts'),
+    }),
   ],
   declarations: [ScannedDevicesPage]
 })
